@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Running Data Collection Commands">
+
+	<intro>
+		<description>
+		    In this tutorial we will look at running data collection commands and calling spec macros within workflows. This tutorial is designed for sites with spec and Tango available, such as the ESRF. Later versions of the software will have actors available for other beamline control systems.
+	    </description>
+	</intro>
+
+   <item
+         title="Workflow Perspective">
+      <description>
+         Please choose the workflow perspective if you do not already have it selected (nothing will happen if you do not).
+      </description>
+      <command
+            required="false"
+            serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=org.edna.workbench.application.perspective.WorkflowPerspective)"/>
+   </item>
+   <item
+         title="Open File">
+      <description>
+         We will start with the finished example file which runs a command. We will run this command in 'Mock' for now. This will mean that no real hardware is connected when the workflow is run.
+      </description>
+      <command
+            required="false"
+            serialization="org.eclipse.ui.navigate.openResource(filePath=workflows/examples/command_example.moml)"/>
+   </item>
+   
+   <item title="Run Workflow">
+      <description>
+         Right click on the 'Monitor' view part and choose 'Tango Preferences...'. Set the preferences to make the tango connection a mock one, the database properties will grey out. Then press 'Ok' on the dialog.
+         Use the green play button in the main toolbar to run the workflow. You will see the results of the actor 'Scan' command in the hdf5 file under the variable 'ascan_result' (go to the hdf5 tree and look in the Dictionary node, use the 'Value' view to see value).
+      </description>
+   </item>
+   
+   <item title="Command Actor">
+      <description>
+         Select the 'Scan' actor. Look at the 'Commands' attribute and open the editor for it by using the '...' button as we have seen before. You can add sequential commands and record their output returned here. Note that in the example here, the text '${interval}' is expanded when the command is run using the value of 'interval' coming from upstream actors. You can expand variables using ${'variable_name'} in text fields and type expressions directly into number fields.
+      </description>
+   </item>
+   
+   <item title="Editing Macros">
+   
+      <description>
+         We will now take a few simple steps for editing and substituting variables into a macro file. Then switch the 'Scan' actor to run a macro file rather than individual commands. Ensure that you are monitoring 'motors/phi' in the 'Monitor' view as we will use this to see the scan on phi.
+      </description>
+      <subitem
+            label="1. Look at the 'Spec Macro' attribute but do not set it. Now go back to the actor 'Scan' and right click on it. You will see the action 'Open Spec Macro' in the menu. Choose this option and a new window will open.">
+      </subitem>
+      <subitem
+            label="2. The part opened is used to insert variables to a macro file. Type into the text editor under the comment (starting with '#') the string 'ascan phi 0 10 10 1'. You could also paste multiple lines of more complex macros here.">
+      </subitem>
+      <subitem
+            label="3. Now highlight the second 10 in the command you just typed. Then double click on the variable 'interval' appearing in the column on the left.">
+      </subitem>
+      <subitem
+            label="4. You now see that the variable 'interval' is inserted into the macro. Go to the toolbar and click the button which completes an expand substitution example. You will see that the example value for 'interval' is substituted. This mode gives a preview of what the substituted file will look like when it is run with spec.">
+      </subitem>
+      <subitem
+            label="5. Save and close your macro.">
+      </subitem>
+      <subitem
+            label="6. Click the 'Commands' attribute in the 'Actor Attributes' view, this time the 'Attribute' column rather than the 'Value', and press the delete key. Now when you run the workflow, only the macro will be run.">
+      </subitem>
+      <subitem
+            label="7. Run the workflow as before. This time the same thing will happen however, the result is not recorded in the variable 'ascan_result'.">
+      </subitem>
+   </item>
+   
+   <item title="Macros - Check">
+      <description>
+         We have seen that macros in the workflow can run either as individual commands with recorded results or as a complete macro using upstream variables.
+      </description>
+    <onCompletion>
+      Congratulations, you are now a macro hacker! Why not experiment with different expand settings in mock mode or using real macros if you are familiar with your hardware setup.
+    </onCompletion>
+   </item>
+   	
+</cheatsheet>

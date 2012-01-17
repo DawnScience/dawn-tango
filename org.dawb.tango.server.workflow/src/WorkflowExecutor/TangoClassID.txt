@@ -1,0 +1,11 @@
+/**
+ * Device Class Identification:
+ * 
+ * Class Name   :	WorkflowExecutor
+ * Contact      :	svensson@esrf.fr
+ * Class Family :	Controllers
+ * Platform     :	All Platforms
+ * Bus          :	Ethernet
+ * Manufacturer :	none
+ * Reference    :	
+ */

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Moving Motors">
+
+	<intro>
+		<description>
+		    In this tutorial we will look at moving motor within workflows. This tutorial is designed for sites with Tango available such as the ESRF. However it can still be run in mock mode. Later versions of the software will have actors available for other beamline control systems.
+	    </description>
+	</intro>
+
+   <item
+         title="Workflow Perspective">
+      <description>
+         Please choose the workflow perspective if you do not already have it selected (nothing will happen if you do not).
+      </description>
+      <command
+            required="false"
+            serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=org.edna.workbench.application.perspective.WorkflowPerspective)"/>
+   </item>
+   <item
+         title="Open File">
+      <description>
+         We will start with the finished example file which moves a motor. We will run this command in 'Mock' for now. This will mean that no real hardware is connected when the workflow is run.
+      </description>
+      <command
+            required="false"
+            serialization="org.eclipse.ui.navigate.openResource(filePath=workflows/examples/motor_example.moml)"/>
+   </item>
+   
+   
+   <item title="New Actors">
+      <description>
+         In this section we look at the two new actors introduced. 
+      </description>
+      <subitem
+            label="1. There are two actors interacting with motors in this example, 'Read Values' and 'Write Values'. Click on Read Values and open the 'Motors' attribute using the '...' button.">
+      </subitem>
+      <subitem
+            label="2. Look at the motor with name 'motors/phi'. Notice that there is a check box to define if the motor should read value only or set value as well. A motor value is always read and the name of it, in this case 'phi' is the scalar value which enters the workflow.">
+      </subitem>
+     <subitem
+            label="3. Click on the 'Review' actor and view the Attributes. A review actor shows the scalar values (or optionally a sub-set of them) and allows the person running the workflow to change them or cancel the workflow. This is useful when interacting with hardware and data collection as well as configuring data analysis algorithms.">
+      </subitem>
+     <subitem
+            label="4. Click on the 'User Fields' attribute and open the editor using the '...' button. This dialog can be used to create fields that the user will interact with. This works by defining a scalar value and a data input type for editing it. There are fields like bounds and a label for the input too.">
+      </subitem>
+      <subitem
+            label="5. Click on the 'Write Values' actor and view the motors being written. Here the same motor is written with the expression 'phi'. In this case phi is the original value extracted and then edited with the 'Review' actor.">
+      </subitem>
+      
+   </item>
+   
+   <item title="Run Workflow">
+      <description>
+         In this section we will run the workflow in mock mode.
+       </description>
+      <subitem
+            label="1. Click on the 'Window' main application menu and choose 'Preferences'. There is a box on the top left for searching. Enter Tango and press enter. Select the 'Tango' preference and ensure that the system is in 'Mock' mode.">
+      </subitem>
+      <subitem
+            label="2. Ensure that the 'Monitor' part is visible and that it has 'phi' and 'kap1' being monitored. If not add them using the URI 'motors/phi' and 'motors/kap1'.">
+      </subitem>
+      <subitem
+            label="3. Right click on the monitor part and open the spec console. Set both 'phi' and 'kap1' to the value 1 using the 'mv' command ('mv phi 1' and 'mv kap1 1').">
+      </subitem>
+      <subitem
+            label="4. Use the green play button in the main toolbar to run the workflow. Enter new motor values in the dialog. Notice that the monitor values change and that the new motor values are in the hdf5 tree when the file opens.">
+      </subitem>
+      
+   </item>
+
+   <item title="Conclusion">
+      <description>
+         We have seen in this section that it is possible to connect to hardware directly from a workflow. This hardware can be any device exposed with a Tango attribute.
+      </description>
+    <onCompletion>
+      Congratulations, you can now read and write motor values and create user interface. Try creating a test workflow with different inputs talking to real hardware.
+    </onCompletion>
+   </item>
+   
+</cheatsheet>

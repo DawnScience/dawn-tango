@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.dawb.common.ui.hardwareClass">
+      <hardware
+            class="org.dawb.tango.extensions.hardware.TangoHardwareObject">
+      </hardware>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consoleFactories">
+      <consoleFactory
+            class="org.dawb.tango.extensions.console.TangoSpecConsoleFactory"
+            icon="icons/application_xp_terminal.png"
+            label="Spec Console">
+      </consoleFactory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="org.dawb.tango.extensions.console.TangoSpecConsoleActions"
+            id="org.dawb.tango.extensions.console.tangoSpecConsoleActions">
+         <enablement></enablement>
+      </consolePageParticipant>
+   </extension>
+   <!--<extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.dawb.workbench.application.data.ac"
+            class="org.dawb.tango.extensions.jive.JiveView"
+            icon="icons/jive_icon.png"
+            id="org.dawb.tango.extensions.JiveView"
+            name="Jive"
+            restorable="true">
+      </view>
+   </extension>-->
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.dawb.tango.extensions.console.TangoSpecConsoleHandler"
+            id="org.dawb.tango.extensions.console.specConsoleCommand"
+            name="Open Spec Console">
+      </command>
+      <command
+            defaultHandler="org.dawb.tango.extensions.editors.actions.ConnectTangoHandler"
+            id="org.dawb.tango.extensions.toggleConnect"
+            name="Toggle connected state">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.dawb.common.ui.views.dashboardView">
+         <command
+               commandId="org.dawb.tango.extensions.console.specConsoleCommand"
+               icon="icons/application_xp_terminal.png"
+               label="Spec Console"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.dawb.common.ui.views.dashboardView">
+         <command
+               commandId="org.dawb.tango.extensions.console.specConsoleCommand"
+               icon="icons/application_xp_terminal.png"
+               label="Spec Console"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.dawb.tango.extensions.editors.MultiScanMultiEditor"
+            default="false"
+            extensions="spec, dat, txt"
+            icon="icons/spec_editor.png"
+            id="org.dawb.tango.extensions.specEditor"
+            name="Spec File">
+      </editor>
+      <editor
+            class="org.dawb.tango.extensions.editors.SharedMemoryEditor"
+            default="false"
+            icon="icons/images.png"
+            id="org.dawb.tango.extensions.sharedMemEditor"
+            name="Shared Memory">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="Actions required for monitoring shared memory."
+            id="org.dawb.tango.extensions.shared.memory"
+            label="Shared Memory"
+            visible="true">
+         <action
+               class="org.dawb.tango.extensions.editors.actions.OpenSpecMonitorHandler"
+               definitionId="org.dawb.tango.extensions.open.shared.memory.part"
+               icon="icons/image_link.png"
+               id="org.dawb.tango.extensions.open.shared.mem.monitor"
+               label="Open a Shared Memory Monitor"
+               menubarPath="tools/additions"
+               style="push"
+               toolbarPath="normal/workbenchAdditions"
+               tooltip="Open a part which monitors shared memory.">
+            <enablement>
+               <systemProperty
+                     name="dawb.workbench.is"
+                     value="true">
+               </systemProperty>
+            </enablement>
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.dawb.tango.extensions.editors.actions.OpenSpecMonitorHandler"
+            id="org.dawb.tango.extensions.open.shared.memory.part"
+            name="Open Shared Memory Monitor">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.dawb.tango.extensions.editors.preferences.SharedInitializer">
+      </initializer>
+      <initializer
+            class="org.dawb.tango.extensions.editors.preferences.CalibrationInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.edna.workbench.preferences.root"
+            class="org.dawb.tango.extensions.editors.preferences.SharedPreferences"
+            id="org.dawb.tango.extensions.shared.preferences"
+            name="Shared Memory">
+      </page>
+      <page
+            category="org.edna.workbench.preferences.root"
+            class="org.dawb.tango.extensions.editors.preferences.CalibrationPreferences"
+            id="org.dawb.tango.extensions.calibration.preferences"
+            name="Calibration">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <serviceFactory
+            factoryClass="org.dawb.tango.extensions.factory.TangoHardwareService">
+         <service
+               serviceClass="org.dawb.common.services.IHardwareService"></service>
+      </serviceFactory>
+   </extension>
+
+</plugin>

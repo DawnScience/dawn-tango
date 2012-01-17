@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="idModel" name="WorkflowEngineModel">
+  <packagedElement xmi:type="uml:Package" xmi:id="idPackage" name="WorkflowEnginePackage">
+    <packagedElement xmi:type="uml:StateMachine" xmi:id="idStateMachine" name="WorkflowEngineStateMachine">
+      <region xmi:id="idRegion" name="MainRegion">
+        <subvertex xmi:type="uml:State" xmi:id="_OVjqoJv7EeCHiY2UrMj2MQ" name="ON"/>
+        <subvertex xmi:type="uml:State" xmi:id="_P__MIJv7EeCHiY2UrMj2MQ" name="RUNNING"/>
+        <subvertex xmi:type="uml:Pseudostate" xmi:id="_TdbjYJv7EeCHiY2UrMj2MQ" name="Pseudostate1"/>
+        <subvertex xmi:type="uml:State" xmi:id="_apGf4Jv7EeCHiY2UrMj2MQ" name="STANDBY"/>
+        <subvertex xmi:type="uml:State" xmi:id="_ksFnwJv7EeCHiY2UrMj2MQ" name="OPEN"/>
+        <transition xmi:id="_XqdkgJv7EeCHiY2UrMj2MQ" name="Start" kind="local" source="_OVjqoJv7EeCHiY2UrMj2MQ" target="_P__MIJv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_cQxBRJv7EeCHiY2UrMj2MQ" name="Pause" kind="local" source="_P__MIJv7EeCHiY2UrMj2MQ" target="_apGf4Jv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_fvhAEJv7EeCHiY2UrMj2MQ" name="Resume" kind="local" source="_apGf4Jv7EeCHiY2UrMj2MQ" target="_P__MIJv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_o74pAJv7EeCHiY2UrMj2MQ" name="ReviewEventFromWorkflowEngine" kind="local" source="_P__MIJv7EeCHiY2UrMj2MQ" target="_ksFnwJv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_uHGJpJv7EeCHiY2UrMj2MQ" name="SetReviewData" kind="local" source="_ksFnwJv7EeCHiY2UrMj2MQ" target="_P__MIJv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_FTwdgJv8EeCHiY2UrMj2MQ" name="Abort" kind="local" source="_apGf4Jv7EeCHiY2UrMj2MQ" target="_OVjqoJv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_NYESM5v8EeCHiY2UrMj2MQ" name="Abort" kind="local" source="_P__MIJv7EeCHiY2UrMj2MQ" target="_OVjqoJv7EeCHiY2UrMj2MQ"/>
+        <transition xmi:id="_X5rPwJv8EeCHiY2UrMj2MQ" name="Abort" kind="local" source="_ksFnwJv7EeCHiY2UrMj2MQ" target="_OVjqoJv7EeCHiY2UrMj2MQ"/>
+      </region>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

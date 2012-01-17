@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+
+   <extension
+         point="com.isencia.passerelle.engine.actorGroups">
+       <actorgroup
+            icon="icons/HardwareGroup.png"
+            id="org.dawb.passerelle.actors.hardware"
+            name="Hardware"
+            open="false"
+            priority="10">
+      </actorgroup>
+      <actorgroup
+            icon="icons/tango.png"
+            id="org.dawb.passerelle.actors.hardware.tango"
+            name="Tango"
+            open="false"
+            parent="org.dawb.passerelle.actors.hardware">
+      </actorgroup>
+   </extension>
+   <extension
+         name="Hardware Actors"
+         point="com.isencia.passerelle.engine.actors">
+      <actor
+            class="org.dawb.passerelle.actors.hardware.TangoMotorTransformer"
+            group="org.dawb.passerelle.actors.hardware.tango"
+            icon="icons/hardware.gif"
+            id="org.dawb.passerelle.actors.motor"
+            name="Motor">
+      </actor>
+      <actor
+            class="org.dawb.passerelle.actors.hardware.TangoCommandTransformer"
+            group="org.dawb.passerelle.actors.hardware.tango"
+            icon="icons/spec_command.png"
+            id="org.dawb.passerelle.actors.specCommand"
+            name="Spec Command">
+      </actor>
+      <actor
+            class="org.dawb.passerelle.actors.hardware.SharedMemorySource"
+            group="org.dawb.passerelle.actors.hardware.tango"
+            icon="icons/sharedmemory.png"
+            id="org.dawb.passerelle.actors.shared.mem"
+            name="Shared Memory Source">
+      </actor>
+      <actor
+            class="org.dawb.passerelle.actors.hardware.TangoMockModeTransformer"
+            group="org.dawb.passerelle.actors.hardware.tango"
+            icon="icons/tangomockmode.gif"
+            id="org.dawb.passerelle.actors.mockmode.transformer"
+            name="Mock Mode Transformer">
+      </actor>
+            <actor
+            class="org.dawb.passerelle.actors.data.SpecImportSource"
+            group="org.dawb.passerelle.actors.actorgroup.io"
+            icon="icons/spec_command.png"
+            id="org.dawb.passerelle.actors.specDataHandler"
+            name="Spec Import">
+      </actor>
+      
+   </extension>
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <cheatsheet
+            category="org.dawb.passerelle.actors.cheat.sheet.category"
+            composite="true"
+            contentFile="cheat/workflow-tango-menu.xml"
+            id="org.dawb.passerelle.actors.tango.cheatsheet1920943321"
+            name="Workflows for ESRF data acqusition">
+      </cheatsheet>
+   </extension>
+
+</fragment>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compositeCheatsheet name="Workflows for ESRF data acqusition">
+   <taskGroup kind="set" name="ESRF Data Acquisition Workflow Tutorials" skip="false">
+      <intro>
+         <b>Introduction</b>
+      </intro>
+      <onCompletion>
+         <b>Conclusion</b>
+      </onCompletion>
+      <task kind="cheatsheet" name="Data collection commands" skip="true">
+         <intro>
+            An introduction to substituting variables into a spec macro file and running the macro. Tango and spec are required to be present for this workflow to work with real hardware, however it can still be run in mock mode.
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <param name="path" value="workflow-command.xml">
+         </param>
+      </task>
+      <task kind="cheatsheet" name="Moving motors" skip="true">
+         <intro>
+            An introduction to moving hardware using actors in the workflow. This is only possible with Tango based hardware at the moment. However there is a mock mode for investigating the functionality without Tango.
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <param name="path" value="workflow-motors.xml">
+         </param>
+      </task>
+   </taskGroup>
+</compositeCheatsheet>
