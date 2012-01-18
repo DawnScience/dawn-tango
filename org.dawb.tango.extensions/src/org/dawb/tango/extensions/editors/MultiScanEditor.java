@@ -20,6 +20,7 @@ import org.dawb.common.ui.plot.PlotType;
 import org.dawb.common.ui.plot.PlottingFactory;
 import org.dawb.common.ui.util.EclipseUtils;
 import org.dawb.common.ui.util.GridUtils;
+import org.dawb.common.ui.views.PlotDataView;
 import org.dawb.common.ui.views.monitor.actions.TangoPreferencesAction;
 import org.dawb.common.ui.widgets.ActionBarWrapper;
 import org.dawb.tango.extensions.Activator;
@@ -163,7 +164,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 			public void run() {
 				plottingSystem.reset();
 				
-				final MultiScanComponent comp = getMultiScanComponent();
+				final MultiScanComponent comp = getMultiScanComponent(false);
 				if (comp==null) return;
 				
 				comp.clear();
@@ -318,7 +319,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 		
 		if (line==null || "".equals(line)) return;
 		
-		final MultiScanComponent multiScanComponent = getMultiScanComponent();
+		final MultiScanComponent multiScanComponent = getMultiScanComponent(false);
 		if (multiScanComponent==null) return;
 
 		final String scanName = this.data.processLine(line);
@@ -335,17 +336,23 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 	}
 
 	public void setPlot(String scanName, String... plotNames) {
-		final MultiScanComponent multiScanComponent = getMultiScanComponent();
+		MultiScanComponent multiScanComponent = getMultiScanComponent(true);
 		if (multiScanComponent==null) return;
 		multiScanComponent.setPlot(scanName, plotNames);
 	}
 	
-	private MultiScanComponent getMultiScanComponent() {
+	private MultiScanComponent getMultiScanComponent(boolean showView) {
 		
 		final IWorkbenchPage wb =EclipseUtils.getActivePage();
 		if (wb==null) return null;
 		
-		final PageBookView view = (PageBookView)wb.findView("org.dawb.workbench.views.dataSetView");
+		PageBookView view = (PageBookView)wb.findView(PlotDataView.ID);
+		if (view==null&&showView)
+			try {
+				view = (PageBookView)wb.showView(PlotDataView.ID);
+			} catch (PartInitException e) {
+				return null;
+			}
 		if (view==null) return null;
 		
 		IPage page = view.getCurrentPage();
