@@ -41,6 +41,7 @@ import org.dawb.common.ui.plot.AbstractPlottingSystem;
 import org.dawb.common.ui.plot.IPlotUpdateListener;
 import org.dawb.common.ui.plot.PlotUpdateEvent;
 import org.dawb.common.util.list.IdentityList;
+import org.dawb.gda.extensions.spec.MultiScanDataParser;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;

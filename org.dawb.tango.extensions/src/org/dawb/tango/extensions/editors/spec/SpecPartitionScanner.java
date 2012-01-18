@@ -9,6 +9,7 @@
  */ 
 package org.dawb.tango.extensions.editors.spec;
 
+import org.dawb.gda.extensions.spec.SpecSyntax;
 import org.dawb.tango.extensions.TangoUtils;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
@@ -29,8 +30,8 @@ public class SpecPartitionScanner extends RuleBasedPartitionScanner {
 
 		IPredicateRule[] rules = new IPredicateRule[2];
 
-		rules[0] = new RegexRule(TangoUtils.COMMENT,   specComment);  //$NON-NLS-1$//$NON-NLS-2$
-		rules[1] = new RegexRule(TangoUtils.SCAN_LINE, specScan);
+		rules[0] = new RegexRule(SpecSyntax.COMMENT,   specComment);  //$NON-NLS-1$//$NON-NLS-2$
+		rules[1] = new RegexRule(SpecSyntax.SCAN_LINE, specScan);
 
 		setPredicateRules(rules);
 	}

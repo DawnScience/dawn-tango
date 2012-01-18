@@ -9,6 +9,7 @@
  */ 
 package org.dawb.tango.extensions.console;
 
+import org.dawb.gda.extensions.spec.SpecSyntax;
 import org.dawb.tango.extensions.TangoUtils;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -53,9 +54,9 @@ public class TangoSpecConsole extends TextConsole {
         
         final String promptRegEx = "\\d+\\."+TangoUtils.getSpecName().toUpperCase()+">";
         addPatternMatchListener(new RegExListener(promptRegEx,                    TangoSpecPartitioner.PROMPT_CATEGORY));
-        addPatternMatchListener(new RegExListener(TangoUtils.COMMENT.pattern(),   TangoSpecPartitioner.COMMENT_CATEGORY));
-        addPatternMatchListener(new RegExListener(TangoUtils.SCAN_LINE.pattern(), TangoSpecPartitioner.SCAN_CATEGORY));
- 	    addPatternMatchListener(new RegExListener(TangoUtils.CMD.pattern(),       TangoSpecPartitioner.COMMAND_CATEGORY));
+        addPatternMatchListener(new RegExListener(SpecSyntax.COMMENT.pattern(),   TangoSpecPartitioner.COMMENT_CATEGORY));
+        addPatternMatchListener(new RegExListener(SpecSyntax.SCAN_LINE.pattern(), TangoSpecPartitioner.SCAN_CATEGORY));
+ 	    addPatternMatchListener(new RegExListener(SpecSyntax.CMD.pattern(),       TangoSpecPartitioner.COMMAND_CATEGORY));
 	
 	}
 	
