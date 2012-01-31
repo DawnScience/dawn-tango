@@ -371,6 +371,7 @@ public class SharedMemoryEditor extends EditorPart {
 						} else {
 							//setToolbarsVisible(false);
 							final AbstractDataset axis = (AbstractDataset)SharedMemoryUtils.getXAxis(sets.get(0));
+							plottingSystem.clear();
 							plottingSystem.createPlot1D(axis, sets, null);
 						}
 					}
