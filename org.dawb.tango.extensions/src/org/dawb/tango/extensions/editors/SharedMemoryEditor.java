@@ -366,12 +366,12 @@ public class SharedMemoryEditor extends EditorPart {
 							}
 							axes.add(createAxisDataset((set.getShape()[0])));
 							axes.add(createAxisDataset((set.getShape()[1])));
-							plottingSystem.createPlot(set, axes, plotType, null);
+							plottingSystem.createPlot2D(set, axes, null);
 							
 						} else {
 							//setToolbarsVisible(false);
 							final AbstractDataset axis = (AbstractDataset)SharedMemoryUtils.getXAxis(sets.get(0));
-							plottingSystem.createPlot(axis, sets, plotType, null);
+							plottingSystem.createPlot1D(axis, sets, null);
 						}
 					}
 					

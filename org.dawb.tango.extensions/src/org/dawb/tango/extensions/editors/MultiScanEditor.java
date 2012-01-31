@@ -260,7 +260,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 
 						
 						final AbstractDataset x = selections.remove(0);
-						plottingSystem.createPlot(x, selections, PlotType.PT1D, monitor);
+						plottingSystem.createPlot1D(x, selections, monitor);
 						
 						monitor.done();
 					}
