@@ -26,6 +26,7 @@ import org.dawb.passerelle.common.message.DataMessageComponent;
 import org.dawb.passerelle.common.message.DataMessageException;
 import org.dawb.passerelle.common.message.IVariable;
 import org.dawb.passerelle.common.message.MessageUtils;
+import org.dawb.passerelle.common.parameter.ParameterUtils;
 import org.dawb.passerelle.editors.SubstitutionEditor;
 import org.dawb.passerelle.editors.SubstitutionParticipant;
 import org.dawb.tango.extensions.TangoUtils;
@@ -308,7 +309,7 @@ public class TangoCommandTransformer extends AbstractDataMessageTransformer impl
 				file = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
 			}		
 		if (file==null) {
-			path = ModelUtils.substitute(path, this);
+			path = ParameterUtils.substitute(path, this);
 			final IProject project= getProject();
 			final String     srcP = IFileUtils.getPathWithoutProject(path.substring(0,path.lastIndexOf('/')));
 			IContainer specDir  = (IContainer)project.findMember(srcP);
