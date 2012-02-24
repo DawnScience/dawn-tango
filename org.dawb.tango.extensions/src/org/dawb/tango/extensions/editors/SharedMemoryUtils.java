@@ -146,7 +146,7 @@ public class SharedMemoryUtils {
 		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		final boolean        isCalib = store.getBoolean(CalibrationConstants.USE);
 		if (!isCalib) {
-			return set.getIndices();
+			return AbstractDataset.arange(0, set.getSize());
 		}
 		
         return getCalibrated(set, null, true);
@@ -168,7 +168,7 @@ public class SharedMemoryUtils {
 		
 		if (checkEnabled) {
 			final boolean        isCalib = store.getBoolean(CalibrationConstants.USE);
-			if (!isCalib)  return ((AbstractDataset)set).getIndices();
+			if (!isCalib)  return AbstractDataset.arange(0, set.getSize(), 1, AbstractDataset.INT32);
 		}
 		
      	final String expr = store.getString(CalibrationConstants.EXPR);
