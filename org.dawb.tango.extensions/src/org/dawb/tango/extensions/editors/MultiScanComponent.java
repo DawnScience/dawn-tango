@@ -21,8 +21,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.dawb.common.ui.plot.AbstractPlottingSystem;
-import org.dawb.common.ui.plot.IPlotUpdateListener;
-import org.dawb.common.ui.plot.PlotUpdateEvent;
+import org.dawb.common.ui.plot.trace.ITraceListener;
+import org.dawb.common.ui.plot.trace.TraceEvent;
 import org.dawb.common.util.list.IdentityList;
 import org.dawb.gda.extensions.spec.MultiScanDataParser;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -149,9 +149,9 @@ public class MultiScanComponent implements ICheckStateListener {
 		/**
 		 * No need to remove this one, the listeners are cleared on a dispose
 		 */
-		system.addPlotListener(new IPlotUpdateListener() {
+		system.addTraceListener(new ITraceListener.Stub() {
 			@Override
-			public void plotRequested(PlotUpdateEvent evt) {
+			public void tracesAltered(TraceEvent evt) {
 				updateSelection();
 			}
 		});
