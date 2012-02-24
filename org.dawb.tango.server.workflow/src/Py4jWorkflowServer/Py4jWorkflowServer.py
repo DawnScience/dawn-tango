@@ -138,20 +138,21 @@ class Py4jWorkflowServer(PyTango.Device_4Impl):
 #==================================================================
 
 #------------------------------------------------------------------
-#	Start command:
+#	StartWorkflow command:
 #
 #	Description: The "Start" command is only allowed in the "ON" state. The command starts the
-#                execution of a workflow with and XML string as input values.
+#                execution of a workflow.
 #                
-#	argin:  DevVarStringArray	Key - value pairs, first name of workflow then initial variables
+#	argin:  DevString	Key - value pairs, first name of workflow then initial variables
 #------------------------------------------------------------------
-	def Start(self, argin):
-		print "In ", self.get_name(), "::Start()"
-		#	Add your own code here
+	def StartWorkflow(self, argin):
+		print "In ", self.get_name(), "::StartWorkflow()"
+		#	Start the py4j gateway server
+		os.system("java /opt/dawb/plugins/org.dawb.workbench.jmx/src/org/dawb/workbench/jmx/py4j/GatewayServerWorkflow.java")
 
 
-#---- Start command State Machine -----------------
-	def is_Start_allowed(self):
+#---- StartWorkflow command State Machine -----------------
+	def is_StartWorkflow_allowed(self):
 		if self.get_state() in [PyTango.DevState.RUNNING,
 		                        PyTango.DevState.STANDBY,
 		                        PyTango.DevState.FAULT,
@@ -359,8 +360,8 @@ class Py4jWorkflowServerClass(PyTango.DeviceClass):
 
 	#	Command definitions
 	cmd_list = {
-		'Start':
-			[[PyTango.DevVarStringArray, "Key - value pairs, first name of workflow then initial variables"],
+		'StartWorkflow':
+			[[PyTango.DevString, "Key - value pairs, first name of workflow then initial variables"],
 			[PyTango.DevVoid, ""]],
 		'Abort':
 			[[PyTango.DevVoid, ""],
@@ -392,7 +393,7 @@ class Py4jWorkflowServerClass(PyTango.DeviceClass):
 	#	Attribute definitions
 	attr_list = {
 		'StateAttribute':
-			[[PyTango.DevState,
+			[[PyTango.DevString,
 			PyTango.SCALAR,
 			PyTango.READ]],
 		'RunningActorName':
