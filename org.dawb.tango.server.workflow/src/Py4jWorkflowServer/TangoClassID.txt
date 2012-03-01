@@ -3,9 +3,9 @@
  * 
  * Class Name   :	Py4jWorkflowServer
  * Contact      :	svensson@esrf.fr
- * Class Family :	Controllers
- * Platform     :	All Platforms
- * Bus          :	Ethernet
+ * Class Family :	Miscellaneous
+ * Platform     :	
+ * Bus          :	
  * Manufacturer :	none
  * Reference    :	
  */
