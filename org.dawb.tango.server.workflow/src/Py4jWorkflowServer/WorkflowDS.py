@@ -66,6 +66,13 @@ class WorkflowDS(PyTango.Device_4Impl):
 		print "[Device delete_device method] for device", self.get_name()
 
 
+#------------------------------------------------------------------
+#	Device initialization
+#------------------------------------------------------------------
+	def init_device(self):
+		print "In ", self.get_name(), "::init_device()"
+		self.set_state(PyTango.DevState.ON)
+		self.get_device_properties(self.get_device_class())
 
 
 #------------------------------------------------------------------
