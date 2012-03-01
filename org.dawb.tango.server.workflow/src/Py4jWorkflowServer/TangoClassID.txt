@@ -1,7 +1,7 @@
 /**
  * Device Class Identification:
  * 
- * Class Name   :	Py4jWorkflowServer
+ * Class Name   :	WorkflowDS
  * Contact      :	svensson@esrf.fr
  * Class Family :	Miscellaneous
  * Platform     :	
