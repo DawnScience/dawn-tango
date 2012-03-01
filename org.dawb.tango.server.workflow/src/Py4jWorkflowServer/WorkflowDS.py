@@ -65,6 +65,16 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def delete_device(self):
 		print "[Device delete_device method] for device", self.get_name()
 
+
+
+
+#------------------------------------------------------------------
+#	Always excuted hook method
+#------------------------------------------------------------------
+	def always_executed_hook(self):
+		print "In ", self.get_name(), "::always_excuted_hook()"
+
+
 #==================================================================
 #
 #	WorkflowDS read/write attribute methods
@@ -75,6 +85,68 @@ class WorkflowDS(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 	def read_attr_hardware(self, data):
 		print "In ", self.get_name(), "::read_attr_hardware()"
+
+
+
+#------------------------------------------------------------------
+#	Read JobSuccess attribute
+#------------------------------------------------------------------
+	def read_JobSuccess(self, attr):
+		print "In ", self.get_name(), "::read_JobSuccess()"
+		
+		#	Add your own code here
+		
+		attr_JobSuccess_read = "Hello Tango world"
+		attr.set_value(attr_JobSuccess_read)
+
+
+#------------------------------------------------------------------
+#	Read JobFailure attribute
+#------------------------------------------------------------------
+	def read_JobFailure(self, attr):
+		print "In ", self.get_name(), "::read_JobFailure()"
+		
+		#	Add your own code here
+		
+		attr_JobFailure_read = "Hello Tango world"
+		attr.set_value(attr_JobFailure_read)
+
+
+#------------------------------------------------------------------
+#	Read StatisticsCollected attribute
+#------------------------------------------------------------------
+	def read_StatisticsCollected(self, attr):
+		print "In ", self.get_name(), "::read_StatisticsCollected()"
+		
+		#	Add your own code here
+		
+		attr_StatisticsCollected_read = "Hello Tango world"
+		attr.set_value(attr_StatisticsCollected_read)
+
+
+#------------------------------------------------------------------
+#	Read TestData attribute
+#------------------------------------------------------------------
+	def read_TestData(self, attr):
+		print "In ", self.get_name(), "::read_TestData()"
+		
+		#	Add your own code here
+		
+		attr_TestData_read = "Hello Tango world"
+		attr.set_value(attr_TestData_read)
+
+
+#------------------------------------------------------------------
+#	Write TestData attribute
+#------------------------------------------------------------------
+	def write_TestData(self, attr):
+		print "In ", self.get_name(), "::write_TestData()"
+		data = []
+		attr.get_write_value(data)
+		print "Attribute value = ", data
+
+		#	Add your own code here
+
 
 
 #==================================================================
@@ -207,68 +279,6 @@ class WorkflowDS(PyTango.Device_4Impl):
 		return argout
 
 
-
-#------------------------------------------------------------------
-#	Read JobSuccess attribute
-#------------------------------------------------------------------
-	def read_JobSuccess(self, attr):
-		print "In ", self.get_name(), "::read_JobSuccess()"
-		
-		#	Add your own code here
-		
-		attr_JobSuccess_read = "Hello Tango world"
-		attr.set_value(attr_JobSuccess_read)
-
-
-#------------------------------------------------------------------
-#	Read JobFailure attribute
-#------------------------------------------------------------------
-	def read_JobFailure(self, attr):
-		print "In ", self.get_name(), "::read_JobFailure()"
-		
-		#	Add your own code here
-		
-		attr_JobFailure_read = "Hello Tango world"
-		attr.set_value(attr_JobFailure_read)
-
-
-#------------------------------------------------------------------
-#	Read StatisticsCollected attribute
-#------------------------------------------------------------------
-	def read_StatisticsCollected(self, attr):
-		print "In ", self.get_name(), "::read_StatisticsCollected()"
-		
-		#	Add your own code here
-		
-		attr_StatisticsCollected_read = "Hello Tango world"
-		attr.set_value(attr_StatisticsCollected_read)
-
-
-#------------------------------------------------------------------
-#	Read TestData attribute
-#------------------------------------------------------------------
-	def read_TestData(self, attr):
-		print "In ", self.get_name(), "::read_TestData()"
-		
-		#	Add your own code here
-		
-		attr_TestData_read = "Hello Tango world"
-		attr.set_value(attr_TestData_read)
-
-
-#------------------------------------------------------------------
-#	Write TestData attribute
-#------------------------------------------------------------------
-	def write_TestData(self, attr):
-		print "In ", self.get_name(), "::write_TestData()"
-		data = []
-		attr.get_write_value(data)
-		print "Attribute value = ", data
-
-		#	Add your own code here
-
-
-
 #==================================================================
 #
 #	WorkflowDSClass class definition
@@ -349,7 +359,6 @@ class WorkflowDSClass(PyTango.DeviceClass):
 		PyTango.DeviceClass.__init__(self, name)
 		self.set_type(name);
 		print "In WorkflowDSClass  constructor"
-
 
 #==================================================================
 #
