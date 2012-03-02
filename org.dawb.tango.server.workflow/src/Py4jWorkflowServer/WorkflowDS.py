@@ -34,12 +34,6 @@
 import PyTango
 import sys
 
-try:
-	from py4j.java_gateway import JavaGateway
-except ImportError, e:
-	print "Error! Py4j must be installed in Python in order for the WorkflowDS server to work."
-	print "Please see http://py4j.sourceforge.net/install.html for installation instructions."
-	sys.exit(1)
 	
 #==================================================================
 #   WorkflowDS Class Description:
@@ -172,10 +166,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def startJob(self, argin):
 		print "In ", self.get_name(), "::startJob()"
 		#	Add your own code here
-		if self.gateway is None:
-			self.gateway = JavaGateway()
-		self.gateway.restart_callback_server()
-		self.gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback)
+
 		return argin
 
 
