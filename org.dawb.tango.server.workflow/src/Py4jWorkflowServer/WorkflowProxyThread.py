@@ -2,6 +2,8 @@
 
 import os, time, threading, subprocess
 
+from Py4jWorkflowCallback import Py4jWorkflowCallback
+
 try:
     from py4j.java_gateway import JavaGateway
 except ImportError, e:
@@ -33,6 +35,24 @@ class WorkflowProxyThread(threading.Thread):
     def shutdown(self):
         self._bShutdown = True
         
+        
+    def startJob(self, _strJobName, _strJobArg):
+        # Start the java gateway server
+        self.startJavaGatewayServer()   
+        # Start the job
+        self._gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback(self))
+        self._gateway.entry_point.setWorkspacePath("/users/svensson/dawb")
+        self._gateway.entry_point.setModelPath("/users/svensson/dawb_workspace/workflows/simple_test.moml")
+        self._gateway.entry_point.setInstallationPath("/opt/dawb/dawb")
+        self._gateway.entry_point.setServiceTerminate(False)
+        self._gateway.entry_point.setTangoSpecMode(True)
+        self._gateway.entry_point.runWorkflow()
+         
+    
+    def synchronizeWorkflow(self):
+        self._gateway.entry_point.synchronizeWorkflow()
+
+    
     def startJavaGatewayServer(self):
         if self._gateway is None:
             self._gateway = JavaGateway()
@@ -58,3 +78,6 @@ class WorkflowProxyThread(threading.Thread):
         self._subprocess = subprocess.Popen(args)
         self._iPID = self._subprocess.pid
         print self._iPID
+        # Give some time for the process to start...
+        time.sleep(1)
+        self._gateway = JavaGateway()

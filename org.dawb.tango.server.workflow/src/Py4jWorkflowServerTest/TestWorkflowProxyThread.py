@@ -24,4 +24,14 @@ class TestWorkflowProxyThread(unittest.TestCase):
         workflowProxyThread = WorkflowProxyThread(None)
         workflowProxyThread.startJavaGatewayServer()
         
+    def test_runWorkflow(self):
+        workflowProxyThread = WorkflowProxyThread(None)
+        workflowProxyThread.start()
+        time.sleep(1)
+        workflowProxyThread.startJob("strJobName", "strJobArg")
+        time.sleep(1)
+        workflowProxyThread.synchronizeWorkflow()
+        time.sleep(1)
+        workflowProxyThread.shutdown()
+        time.sleep(1)
         
