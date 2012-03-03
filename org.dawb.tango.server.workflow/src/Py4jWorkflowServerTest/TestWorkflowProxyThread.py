@@ -21,5 +21,7 @@ class TestWorkflowProxyThread(unittest.TestCase):
         
 
     def test_connectToGateway(self):
-        pass
+        workflowProxyThread = WorkflowProxyThread(None)
+        workflowProxyThread.startJavaGatewayServer()
+        
         
