@@ -33,16 +33,21 @@ class WorkflowProxyThread(threading.Thread):
             
             
     def shutdown(self):
+        self.shutdownJavaGatewayServer()
         self._bShutdown = True
         
-        
+    
+    def setWorkspacePath(self, _strWorkspacePath):
+        self._strWorkspacePath = _strWorkspacePath
+    
+    
     def startJob(self, _strJobName, _strJobArg):
         # Start the java gateway server
         self.startJavaGatewayServer()   
         # Start the job
         self._gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback(self))
-        self._gateway.entry_point.setWorkspacePath("/users/svensson/dawb")
-        self._gateway.entry_point.setModelPath("/users/svensson/dawb_workspace/workflows/simple_test.moml")
+        self._gateway.entry_point.setWorkspacePath(self._strWorkspacePath )
+        self._gateway.entry_point.setModelPath(_strJobName)
         self._gateway.entry_point.setInstallationPath("/opt/dawb/dawb")
         self._gateway.entry_point.setServiceTerminate(False)
         self._gateway.entry_point.setTangoSpecMode(True)
@@ -54,9 +59,8 @@ class WorkflowProxyThread(threading.Thread):
 
     
     def startJavaGatewayServer(self):
-        if self._gateway is None:
-            self._gateway = JavaGateway()
-        self._gateway.shutdown()
+        self.shutdownJavaGatewayServer()
+        time.sleep(0.1)
         strPathToDawbJmx = os.path.join(os.environ["JMX_LOC"], "org.dawb.workbench.jmx")
         listClasspath = []
         listClasspath.append(os.path.join(strPathToDawbJmx, "py4j0.7.jar"))
@@ -79,5 +83,15 @@ class WorkflowProxyThread(threading.Thread):
         self._iPID = self._subprocess.pid
         print self._iPID
         # Give some time for the process to start...
-        time.sleep(1)
+        time.sleep(0.1)
         self._gateway = JavaGateway()
+        self._gateway.restart_callback_server()
+        time.sleep(0.5)
+
+
+    def shutdownJavaGatewayServer(self):
+        if self._gateway is None:
+            self._gateway = JavaGateway()
+        self._gateway._shutdown_callback_server()
+        self._gateway.shutdown()
+        self._gateway = None
