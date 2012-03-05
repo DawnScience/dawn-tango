@@ -95,3 +95,7 @@ class WorkflowProxyThread(threading.Thread):
         self._gateway._shutdown_callback_server()
         self._gateway.shutdown()
         self._gateway = None
+        if self._subprocess is not None:
+            self._subprocess.kill()
+            self._subprocess = None
+        time.sleep(1)
