@@ -25,6 +25,7 @@ class WorkflowProxyThread(threading.Thread):
         self._subprocess = None
         self._iPID = None
         self._gateway = None
+        self._strInstallationPath = "/sware/isdd/soft/dawb/nightly/linux_x64/dawb/dawb"
         
         
     def run(self):
@@ -35,6 +36,7 @@ class WorkflowProxyThread(threading.Thread):
     def shutdown(self):
         self.shutdownJavaGatewayServer()
         self._bShutdown = True
+        time.sleep(1)
         
     
     def setWorkspacePath(self, _strWorkspacePath):
@@ -46,9 +48,9 @@ class WorkflowProxyThread(threading.Thread):
         self.startJavaGatewayServer()   
         # Start the job
         self._gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback(self))
-        self._gateway.entry_point.setWorkspacePath(self._strWorkspacePath )
+        self._gateway.entry_point.setWorkspacePath(self._strWorkspacePath)
         self._gateway.entry_point.setModelPath(_strJobName)
-        self._gateway.entry_point.setInstallationPath("/opt/dawb/dawb")
+        self._gateway.entry_point.setInstallationPath(self._strInstallationPath)
         self._gateway.entry_point.setServiceTerminate(False)
         self._gateway.entry_point.setTangoSpecMode(True)
         self._gateway.entry_point.runWorkflow()
@@ -77,11 +79,8 @@ class WorkflowProxyThread(threading.Thread):
         args.append("-classpath")
         args.append(strClasspathTotal)
         args.append("org.dawb.workbench.jmx.py4j.GatewayServerWorkflow")
-        print args
-#        kwargs["preexec_fn"] = os.setsid
         self._subprocess = subprocess.Popen(args)
         self._iPID = self._subprocess.pid
-        print self._iPID
         # Give some time for the process to start...
         time.sleep(0.1)
         self._gateway = JavaGateway()
