@@ -180,7 +180,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def abort(self, argin):
 		print "In ", self.get_name(), "::abort()"
 		#	Add your own code here
-		
+		argout = False
 		return argout
 
 
@@ -194,7 +194,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def getJobState(self, argin):
 		print "In ", self.get_name(), "::getJobState()"
 		#	Add your own code here
-		
+		argout = "Not implemented!"
 		return argout
 
 
@@ -208,7 +208,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def initPlugin(self, argin):
 		print "In ", self.get_name(), "::initPlugin()"
 		#	Add your own code here
-		
+		argout = "Not implemented!"		
 		return argout
 
 
@@ -222,7 +222,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def cleanJob(self, argin):
 		print "In ", self.get_name(), "::cleanJob()"
 		#	Add your own code here
-		
+		argout = "Not implemented!"		
 		return argout
 
 
@@ -245,7 +245,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def getStatistics(self):
 		print "In ", self.get_name(), "::getStatistics()"
 		#	Add your own code here
-		
+		argout = "Not implemented!"		
 		return argout
 
 
@@ -259,7 +259,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def getJobOutput(self, argin):
 		print "In ", self.get_name(), "::getJobOutput()"
 		#	Add your own code here
-		
+		argout = "Not implemented!"		
 		return argout
 
 
@@ -273,7 +273,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def getJobInput(self, argin):
 		print "In ", self.get_name(), "::getJobInput()"
 		#	Add your own code here
-		
+		argout = "Not implemented!"
 		return argout
 
 
