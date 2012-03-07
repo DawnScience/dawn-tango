@@ -71,6 +71,7 @@ class WorkflowProxyThread(threading.Thread):
         listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.ch.qos.logback.classic-0.9.15.jar"))
         listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.ch.qos.logback.core-0.9.15.jar"))
         listClasspath.append(os.path.join(strPathToDawbJmx, "bin"))
+        listClasspath.append("/tmp/123456")
         args = []
         strClasspathTotal = ""
         for strClasspath in listClasspath:
@@ -98,4 +99,5 @@ class WorkflowProxyThread(threading.Thread):
         if self._subprocess is not None:
             self._subprocess.kill()
             self._subprocess = None
+        # 
         time.sleep(1)

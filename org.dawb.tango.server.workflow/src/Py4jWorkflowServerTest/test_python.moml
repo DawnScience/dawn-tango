@@ -33,7 +33,7 @@
         </property>
         <property name="Name Mode" class="com.isencia.passerelle.util.ptolemy.StringChoiceParameter" value="Attempt to use image name if there is one.">
         </property>
-        <property name="Python Script" class="com.isencia.passerelle.util.ptolemy.ResourceParameter" value="workflow/src/test_python.py">
+        <property name="Python Script" class="com.isencia.passerelle.util.ptolemy.ResourceParameter" value="/workflows/src/test_python.py">
         </property>
         <property name="Create Separate Interpreter" class="ptolemy.data.expr.Parameter" value="false">
         </property>
