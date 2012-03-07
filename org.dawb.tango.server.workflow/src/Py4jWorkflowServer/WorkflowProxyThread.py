@@ -25,7 +25,8 @@ class WorkflowProxyThread(threading.Thread):
         self._subprocess = None
         self._iPID = None
         self._gateway = None
-        self._strInstallationPath = "/sware/isdd/soft/dawb/nightly/linux_x64/dawb/dawb"
+        #self._strInstallationPath = "/sware/isdd/soft/dawb/nightly/linux_x64/dawb/dawb"
+        self._strInstallationPath = "/opt/dawb/dawb"
         
         
     def run(self):
@@ -52,7 +53,7 @@ class WorkflowProxyThread(threading.Thread):
         self._gateway.entry_point.setModelPath(_strJobName)
         self._gateway.entry_point.setInstallationPath(self._strInstallationPath)
         self._gateway.entry_point.setServiceTerminate(False)
-        self._gateway.entry_point.setTangoSpecMode(True)
+        self._gateway.entry_point.setTangoSpecMode(False)
         self._gateway.entry_point.runWorkflow()
          
     
