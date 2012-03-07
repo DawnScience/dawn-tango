@@ -27,6 +27,8 @@ class WorkflowProxyThread(threading.Thread):
         self._gateway = None
         #self._strInstallationPath = "/sware/isdd/soft/dawb/nightly/linux_x64/dawb/dawb"
         self._strInstallationPath = "/opt/dawb/dawb"
+        self._strDataInput = ""
+        self._strDataOutput = None
         
         
     def run(self):
@@ -45,10 +47,11 @@ class WorkflowProxyThread(threading.Thread):
     
     
     def startJob(self, _strJobName, _strJobArg):
+        self._strDataInput = _strJobArg
         # Start the java gateway server
         self.startJavaGatewayServer()   
         # Start the job
-        self._gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback(self))
+        self._gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback(self, self._gateway))
         self._gateway.entry_point.setWorkspacePath(self._strWorkspacePath)
         self._gateway.entry_point.setModelPath(_strJobName)
         self._gateway.entry_point.setInstallationPath(self._strInstallationPath)
@@ -101,3 +104,17 @@ class WorkflowProxyThread(threading.Thread):
             self._subprocess = None
         # 
         time.sleep(1)
+
+    def createUserInput(self, actorName, dictUserValues):
+        return dictUserValues
+    
+    
+    def getDataInput(self):
+        return self._strDataInput
+    
+        
+    def getDataOutput(self):
+        return self._strDataOutput
+
+    def setDataOutput(self, _strDataOutput):
+        self._strDataOutput = _strDataOutput

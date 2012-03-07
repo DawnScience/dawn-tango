@@ -22,7 +22,8 @@ class TestWorkflowSleep(unittest.TestCase):
         self._strSrcDir = os.path.join(self._strModelDir, "src")
         os.mkdir(self._strSrcDir)
         #self._strPathWorkflow = os.path.join(self._strModelDir, self._strTestFile)
-        self._strPathWorkflow = os.path.join("/tmp/dawb_workspace_0QtIib/workflows", self._strTestFile)
+        #self._strPathWorkflow = os.path.join("/tmp/dawb_workspace_0QtIib/workflows", self._strTestFile)
+        self._strPathWorkflow = os.path.join("/users/svensson/dawb_workspace/workflows", self._strTestFile)
         self._strPathScript = os.path.join(self._strSrcDir, "test_python.py")
         shutil.copyfile(self._strTestFile, self._strPathWorkflow)
         shutil.copyfile("test_python.py", self._strPathScript)
@@ -32,11 +33,15 @@ class TestWorkflowSleep(unittest.TestCase):
         workflowProxyThread = WorkflowProxyThread(None)
         workflowProxyThread.start()
         #workflowProxyThread.setWorkspacePath(self._strWorkspacePath)
-        workflowProxyThread.setWorkspacePath("/tmp/dawb_workspace_0QtIib")
-        workflowProxyThread.startJob(self._strPathWorkflow, "XMLinput")
+        #workflowProxyThread.setWorkspacePath("/tmp/dawb_workspace_0QtIib")
+        workflowProxyThread.setWorkspacePath("/users/svensson/dawb_workspace")
+        workflowProxyThread.startJob(self._strPathWorkflow, "2.0")
         workflowProxyThread.synchronizeWorkflow()
+        result = workflowProxyThread.getDataOutput()
         workflowProxyThread.shutdownJavaGatewayServer()        
         workflowProxyThread.shutdown()
+        print [result]
+        self.assertEqual(result, unicode("3.0"), "Check of result of python test workflow")
 
 
     def tearDown(self):
