@@ -35,4 +35,4 @@ class TestWorkflowSleep(unittest.TestCase):
 
 
     def tearDown(self):
-        shutil.rmtree(self._strPathWorkflow, ignore_errors=True)
+        shutil.rmtree(self._strWorkspacePath)

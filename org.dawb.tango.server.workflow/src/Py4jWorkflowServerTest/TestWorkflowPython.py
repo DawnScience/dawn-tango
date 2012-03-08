@@ -19,11 +19,12 @@ class TestWorkflowSleep(unittest.TestCase):
         self._strWorkspacePath = tempfile.mkdtemp(prefix="dawb_workspace_")
         self._strModelDir = os.path.join(self._strWorkspacePath, "workflows")
         os.mkdir(self._strModelDir)
+        os.system("cd %s; tar xvzf %s" % (self._strModelDir, os.path.join(os.getcwd(), "pythonMetadata.tgz")))
         self._strSrcDir = os.path.join(self._strModelDir, "src")
         os.mkdir(self._strSrcDir)
-        #self._strPathWorkflow = os.path.join(self._strModelDir, self._strTestFile)
+        self._strPathWorkflow = os.path.join(self._strModelDir, self._strTestFile)
         #self._strPathWorkflow = os.path.join("/tmp/dawb_workspace_0QtIib/workflows", self._strTestFile)
-        self._strPathWorkflow = os.path.join("/users/svensson/dawb_workspace/workflows", self._strTestFile)
+        #self._strPathWorkflow = os.path.join("/users/svensson/dawb_workspace/workflows", self._strTestFile)
         self._strPathScript = os.path.join(self._strSrcDir, "test_python.py")
         shutil.copyfile(self._strTestFile, self._strPathWorkflow)
         shutil.copyfile("test_python.py", self._strPathScript)
@@ -32,9 +33,9 @@ class TestWorkflowSleep(unittest.TestCase):
     def test_runWorkflow(self):
         workflowProxyThread = WorkflowProxyThread(None)
         workflowProxyThread.start()
-        #workflowProxyThread.setWorkspacePath(self._strWorkspacePath)
+        workflowProxyThread.setWorkspacePath(self._strWorkspacePath)
         #workflowProxyThread.setWorkspacePath("/tmp/dawb_workspace_0QtIib")
-        workflowProxyThread.setWorkspacePath("/users/svensson/dawb_workspace")
+        #workflowProxyThread.setWorkspacePath("/users/svensson/dawb_workspace")
         workflowProxyThread.startJob(self._strPathWorkflow, "2.0")
         workflowProxyThread.synchronizeWorkflow()
         result = workflowProxyThread.getDataOutput()
@@ -45,4 +46,5 @@ class TestWorkflowSleep(unittest.TestCase):
 
 
     def tearDown(self):
-        shutil.rmtree(self._strPathWorkflow, ignore_errors=True)
+        pass
+        #shutil.rmtree(self._strWorkspacePath)
