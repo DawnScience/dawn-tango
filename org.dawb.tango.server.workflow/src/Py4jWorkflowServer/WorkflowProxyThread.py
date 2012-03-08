@@ -2,7 +2,6 @@
 
 import os, time, threading, subprocess
 
-from Py4jWorkflowCallback import Py4jWorkflowCallback
 
 try:
     from py4j.java_gateway import JavaGateway
@@ -24,7 +23,7 @@ class WorkflowProxyThread(threading.Thread):
         self._bShutdown = False
         self._subprocess = None
         self._iPID = None
-        self._gateway = None
+        self._gateway_client = None
         #self._strInstallationPath = "/sware/isdd/soft/dawb/nightly/linux_x64/dawb/dawb"
         self._strInstallationPath = "/opt/dawb/dawb"
         self._strDataInput = ""
@@ -51,17 +50,17 @@ class WorkflowProxyThread(threading.Thread):
         # Start the java gateway server
         self.startJavaGatewayServer()   
         # Start the job
-        self._gateway.entry_point.setPy4jWorkflowCallback(Py4jWorkflowCallback(self, self._gateway))
-        self._gateway.entry_point.setWorkspacePath(self._strWorkspacePath)
-        self._gateway.entry_point.setModelPath(_strJobName)
-        self._gateway.entry_point.setInstallationPath(self._strInstallationPath)
-        self._gateway.entry_point.setServiceTerminate(False)
-        self._gateway.entry_point.setTangoSpecMode(False)
-        self._gateway.entry_point.runWorkflow()
+        self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
+        self._gateway_client.entry_point.setWorkspacePath(self._strWorkspacePath)
+        self._gateway_client.entry_point.setModelPath(_strJobName)
+        self._gateway_client.entry_point.setInstallationPath(self._strInstallationPath)
+        self._gateway_client.entry_point.setServiceTerminate(False)
+        self._gateway_client.entry_point.setTangoSpecMode(False)
+        self._gateway_client.entry_point.runWorkflow()
          
     
     def synchronizeWorkflow(self):
-        self._gateway.entry_point.synchronizeWorkflow()
+        self._gateway_client.entry_point.synchronizeWorkflow()
 
     
     def startJavaGatewayServer(self):
@@ -88,26 +87,75 @@ class WorkflowProxyThread(threading.Thread):
         self._iPID = self._subprocess.pid
         # Give some time for the process to start...
         time.sleep(0.1)
-        self._gateway = JavaGateway()
-        self._gateway.restart_callback_server()
+        self._gateway_client = JavaGateway()
+        self._gateway_client.restart_callback_server()
         time.sleep(0.5)
 
 
     def shutdownJavaGatewayServer(self):
-        if self._gateway is None:
-            self._gateway = JavaGateway()
-        self._gateway._shutdown_callback_server()
-        self._gateway.shutdown()
-        self._gateway = None
+        if self._gateway_client is None:
+            self._gateway_client = JavaGateway()
+        self._gateway_client._shutdown_callback_server()
+        self._gateway_client.shutdown()
+        self._gateway_client = None
         if self._subprocess is not None:
             self._subprocess.kill()
             self._subprocess = None
         # 
         time.sleep(1)
 
+#################################################################################
+# 
+# Py4jWorkfloCallback methonds
+
     def createUserInput(self, actorName, dictUserValues):
-        return dictUserValues
+        print "="*80
+        print "="*80
+        print "Py4jWorkflowCallback.createUserInput: actorName = ", actorName
+        print "Py4jWorkflowCallback.createUserInput: dict = ", dictUserValues
+        returnMap = None
+        if actorName == "Start":
+            java_map = self._gateway_client.jvm.java.util.HashMap()
+            java_map["dataInput"] = self.getDataInput()
+            java_map["defaltValues"] = "false"
+            print java_map
+            returnMap = java_map
+        elif actorName == "End":
+            if "dataOutput" in dictUserValues.keys():
+                self.setDataOutput(dictUserValues["dataOutput"])
+            returnMap = dictUserValues
+        else:
+            # TODO: TANGO callback
+            returnMap = dictUserValues
+#        newDict[unicode("x")] = unicode("2.0")
+#        print "Py4jWorkflowCallback.createUserInput: new dict = ", newDict
+        print "="*80
+        print "="*80
+        return returnMap
+
+    def setActorSelected(self, actorName, isSelected):
+        print "="*80
+        print "="*80
+        print "Py4jWorkflowCallback.setActorSelected: ", actorName, " is selected: ", isSelected
+        print "="*80
+        print "="*80
     
+    def showMessage(self, strTitle, strMessage, iType):
+        print "="*80
+        print "="*80
+        print "Py4jWorkflowCallback.showMessage: title = ", strTitle
+        print "Py4jWorkflowCallback.showMessage: message = ", strMessage
+        print "Py4jWorkflowCallback.showMessage: iType = ", iType
+        print "="*80
+        print "="*80
+
+    class Java: # IGNORE:W0232
+        implements = ['org.dawb.workbench.jmx.py4j.Py4jWorkflowCallback']
+
+
+#
+#
+##################################################################################
     
     def getDataInput(self):
         return self._strDataInput
