@@ -17,9 +17,9 @@ if not "JMX_LOC" in os.environ.keys():
 
 class WorkflowProxyThread(threading.Thread):
     
-    def __init__(self, _parent):
+    def __init__(self, _workflowDS=None):
         threading.Thread.__init__(self)
-        self._workflowDS = _parent
+        self._workflowDS = _workflowDS
         self._bShutdown = False
         self._subprocess = None
         self._iPID = None
@@ -28,39 +28,41 @@ class WorkflowProxyThread(threading.Thread):
         self._strInstallationPath = "/opt/dawb/dawb"
         self._strDataInput = ""
         self._strDataOutput = None
+        self._strModelPath = None
         
         
     def run(self):
-        while(not self._bShutdown):
-            time.sleep(1)
-            
-            
-    def shutdown(self):
+        # Start the java gateway server
+        self.startJavaGatewayServer()   
+        # Start the job
+        if self._workflowDS is None:
+            self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
+        else:
+            self._gateway_client.entry_point.setPy4jWorkflowCallback(self._workflowDS)
+        self._gateway_client.entry_point.setWorkspacePath(self._strWorkspacePath)
+        self._gateway_client.entry_point.setModelPath(self._strModelPath)
+        self._gateway_client.entry_point.setInstallationPath(self._strInstallationPath)
+        self._gateway_client.entry_point.setServiceTerminate(False)
+        self._gateway_client.entry_point.setTangoSpecMode(False)
+        self._gateway_client.entry_point.runWorkflow()
+        self._gateway_client.entry_point.synchronizeWorkflow()
         self.shutdownJavaGatewayServer()
-        self._bShutdown = True
-        time.sleep(1)
+            
         
     
     def setWorkspacePath(self, _strWorkspacePath):
         self._strWorkspacePath = _strWorkspacePath
     
     
-    def startJob(self, _strJobName, _strJobArg):
+    def startJob(self, _strModelPath, _strJobArg):
+        self._strModelPath = _strModelPath
         self._strDataInput = _strJobArg
-        # Start the java gateway server
-        self.startJavaGatewayServer()   
-        # Start the job
-        self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
-        self._gateway_client.entry_point.setWorkspacePath(self._strWorkspacePath)
-        self._gateway_client.entry_point.setModelPath(_strJobName)
-        self._gateway_client.entry_point.setInstallationPath(self._strInstallationPath)
-        self._gateway_client.entry_point.setServiceTerminate(False)
-        self._gateway_client.entry_point.setTangoSpecMode(False)
-        self._gateway_client.entry_point.runWorkflow()
+        self.start()
          
     
-    def synchronizeWorkflow(self):
-        self._gateway_client.entry_point.synchronizeWorkflow()
+    def synchronize(self, _fTimeOut=30.0):
+        self.join(_fTimeOut)
+
 
     
     def startJavaGatewayServer(self):
@@ -106,7 +108,7 @@ class WorkflowProxyThread(threading.Thread):
 
 #################################################################################
 # 
-# Py4jWorkfloCallback methonds
+# Default Py4jWorkfloCallback methonds
 
     def createUserInput(self, actorName, dictUserValues):
         print "="*80

@@ -25,12 +25,9 @@ class TestWorkflowSleep(unittest.TestCase):
         
     def test_runWorkflow(self):
         workflowProxyThread = WorkflowProxyThread(None)
-        workflowProxyThread.start()
         workflowProxyThread.setWorkspacePath(self._strWorkspacePath)
         workflowProxyThread.startJob(self._strPathWorkflow, "XMLinput")
-        workflowProxyThread.synchronizeWorkflow()
-        workflowProxyThread.shutdownJavaGatewayServer()        
-        workflowProxyThread.shutdown()
+        workflowProxyThread.synchronize()
 
 
     def tearDown(self):
