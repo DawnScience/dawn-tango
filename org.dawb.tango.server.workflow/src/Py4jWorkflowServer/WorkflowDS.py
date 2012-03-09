@@ -32,8 +32,16 @@
 
 
 import PyTango
-import sys
+import sys, os
 
+
+if not "JMX_LOC" in os.environ.keys():
+	strCwd = os.getcwd()
+	strJmxLoc = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(strCwd)))), "dawn-workflow")
+	print strJmxLoc
+	os.environ["JMX_LOC"] = strJmxLoc
+
+from WorkflowProxyThread import WorkflowProxyThread
 	
 #==================================================================
 #   WorkflowDS Class Description:
@@ -67,6 +75,9 @@ class WorkflowDS(PyTango.Device_4Impl):
 		print "In ", self.get_name(), "::init_device()"
 		self.set_state(PyTango.DevState.ON)
 		self.get_device_properties(self.get_device_class())
+		self._workflowProxyThread = WorkflowProxyThread(self)
+		self._workflowProxyThread.start()
+		self._workflowProxyThread.setWorkspacePath("/users/svensson/dawb_workspace")
 
 
 #------------------------------------------------------------------
@@ -166,8 +177,9 @@ class WorkflowDS(PyTango.Device_4Impl):
 	def startJob(self, argin):
 		print "In ", self.get_name(), "::startJob()"
 		#	Add your own code here
-
-		return argin
+		self._workflowProxyThread.startJob(argin[0], argin[1])
+		# Job id for workflows is always 1
+		return "1"
 
 
 #------------------------------------------------------------------
