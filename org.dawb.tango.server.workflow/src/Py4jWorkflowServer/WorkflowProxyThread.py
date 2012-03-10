@@ -29,24 +29,32 @@ class WorkflowProxyThread(threading.Thread):
         self._strDataInput = ""
         self._strDataOutput = None
         self._strModelPath = None
+        self._jobId = "0"
         
         
     def run(self):
-        # Start the java gateway server
-        self.startJavaGatewayServer()   
-        # Start the job
-        if self._workflowDS is None:
-            self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
-        else:
-            self._gateway_client.entry_point.setPy4jWorkflowCallback(self._workflowDS)
-        self._gateway_client.entry_point.setWorkspacePath(self._strWorkspacePath)
-        self._gateway_client.entry_point.setModelPath(self._strModelPath)
-        self._gateway_client.entry_point.setInstallationPath(self._strInstallationPath)
-        self._gateway_client.entry_point.setServiceTerminate(False)
-        self._gateway_client.entry_point.setTangoSpecMode(False)
-        self._gateway_client.entry_point.runWorkflow()
-        self._gateway_client.entry_point.synchronizeWorkflow()
-        self.shutdownJavaGatewayServer()
+        try:
+            # Start the java gateway server
+            self.startJavaGatewayServer()   
+            # Start the job
+            if self._workflowDS is None:
+                self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
+            else:
+                self._gateway_client.entry_point.setPy4jWorkflowCallback(self._workflowDS)
+            self._gateway_client.entry_point.setWorkspacePath(self._strWorkspacePath)
+            self._gateway_client.entry_point.setModelPath(self._strModelPath)
+            self._gateway_client.entry_point.setInstallationPath(self._strInstallationPath)
+            self._gateway_client.entry_point.setServiceTerminate(False)
+            self._gateway_client.entry_point.setTangoSpecMode(False)
+            self._gateway_client.entry_point.runWorkflow()
+            self._gateway_client.entry_point.synchronizeWorkflow()
+            if self._workflowDS is not None:
+                self._workflowDS.set_jobSuccess(self._jobId)
+        except Exception, e:
+            if self._workflowDS is not None:
+                self._workflowDS.set_jobFailure(self._jobId)            
+        finally:
+            self.shutdownJavaGatewayServer()        
             
         
     
