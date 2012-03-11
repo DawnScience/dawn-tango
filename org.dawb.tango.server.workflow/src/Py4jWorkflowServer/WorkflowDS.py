@@ -334,11 +334,13 @@ class WorkflowDS(PyTango.Device_4Impl):
 ##################################################################################
 
     def set_jobSuccess(self, _jobId):
+        print "In ", self.get_name(), "::set_jobSuccess()"
         self.push_change_event("jobSuccess", _jobId)
         self.set_state(PyTango.DevState.ON)
 
 
     def set_jobFailure(self, _jobId):
+        print "In ", self.get_name(), "::set_jobFailure()"
         self.push_change_event("jobFailure", _jobId)
         self.set_state(PyTango.DevState.ON)
 
