@@ -48,6 +48,11 @@ from WorkflowProxyThread import WorkflowProxyThread
 #
 #
 #==================================================================
+#     Device States Description:
+#
+#   DevState.ON :       Workflow device server ready to accept new jobs
+#   DevState.RUNNING :  A workflow job is running
+#==================================================================
 
 
 class WorkflowDS(PyTango.Device_4Impl):
@@ -57,12 +62,14 @@ class WorkflowDS(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Device constructor
 #------------------------------------------------------------------
-    def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+    def __init__(self,cl, name):
+        PyTango.Device_4Impl.__init__(self,cl,name)
         WorkflowDS.init_device(self)
+        self._strActorSelected = "No actor selected"
         self._strDataInput = ""
         self._strDataOutput = None
-
+        self._strJobSuccess = "No workflow job executed yet"
+        self._strJobFailure = "No workflow job executed yet"
 
 #------------------------------------------------------------------
 #    Device destructor
@@ -90,6 +97,71 @@ class WorkflowDS(PyTango.Device_4Impl):
         #print "In ", self.get_name(), "::always_excuted_hook()"
 
 
+    def createUserInput(self, actorName, dictUserValues):
+        print "="*80
+        print "="*80
+        print "Py4jWorkflowCallback.createUserInput: actorName = ", actorName
+        print "Py4jWorkflowCallback.createUserInput: dict = ", dictUserValues
+        returnMap = None
+        if actorName == "Start":
+            java_map = self._gateway_client.jvm.java.util.HashMap()
+            java_map["dataInput"] = self.getDataInput()
+            java_map["defaltValues"] = "false"
+            print java_map
+            returnMap = java_map
+        elif actorName == "End":
+            if "dataOutput" in dictUserValues.keys():
+                self.setDataOutput(dictUserValues["dataOutput"])
+            returnMap = dictUserValues
+        else:
+            # TODO: TANGO callback
+            returnMap = dictUserValues
+#        newDict[unicode("x")] = unicode("2.0")
+#        print "Py4jWorkflowCallback.createUserInput: new dict = ", newDict
+        print "="*80
+        print "="*80
+        return returnMap
+
+
+    def setActorSelected(self, actorName, isSelected):
+        print "="*80
+        print "="*80
+        print "Py4jWorkflowCallback.setActorSelected: ", actorName, " is selected: ", isSelected
+        if isSelected:
+            self._strActorSelected = actorName
+            self.push_change_event("actorSelected", actorName)
+        print "="*80
+        print "="*80
+
+
+    def showMessage(self, strTitle, strMessage, iType):
+        print "="*80
+        print "="*80
+        print "Py4jWorkflowCallback.showMessage: title = ", strTitle
+        print "Py4jWorkflowCallback.showMessage: message = ", strMessage
+        print "Py4jWorkflowCallback.showMessage: iType = ", iType
+        print "="*80
+        print "="*80
+
+    class Java: # IGNORE:W0232
+        implements = ['org.dawb.workbench.jmx.py4j.Py4jWorkflowCallback']
+
+
+    def set_jobSuccess(self, _jobId):
+        print "In ", self.get_name(), "::set_jobSuccess()"
+        self.push_change_event("jobSuccess", _jobId)
+        self._strActorSelected = "No workflow running"
+        self.push_change_event("actorSelected", self._strActorSelected)
+        self.set_state(PyTango.DevState.ON)
+
+
+    def set_jobFailure(self, _jobId):
+        print "In ", self.get_name(), "::set_jobFailure()"
+        self.push_change_event("jobFailure", _jobId)
+        self._strActorSelected = "No workflow running"
+        self.push_change_event("actorSelected", self._strActorSelected)
+        self.set_state(PyTango.DevState.ON)
+
 #==================================================================
 #
 #    WorkflowDS read/write attribute methods
@@ -98,7 +170,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Read Attribute Hardware
 #------------------------------------------------------------------
-    def read_attr_hardware(self, data):
+    def read_attr_hardware(self,data):
         pass
         #print "In ", self.get_name(), "::read_attr_hardware()"
 
@@ -112,7 +184,7 @@ class WorkflowDS(PyTango.Device_4Impl):
         
         #    Add your own code here
         
-        attr_JobSuccess_read = "Hello Tango world"
+        attr_JobSuccess_read = self._strJobSuccess
         attr.set_value(attr_JobSuccess_read)
 
 
@@ -124,7 +196,7 @@ class WorkflowDS(PyTango.Device_4Impl):
         
         #    Add your own code here
         
-        attr_JobFailure_read = "Hello Tango world"
+        attr_JobFailure_read = self.strJobFailure
         attr.set_value(attr_JobFailure_read)
 
 
@@ -141,27 +213,39 @@ class WorkflowDS(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
-#    Read TestData attribute
+#    Read testData attribute
 #------------------------------------------------------------------
-    def read_TestData(self, attr):
-        #print "In ", self.get_name(), "::read_TestData()"
+    def read_testData(self, attr):
+        #print "In ", self.get_name(), "::read_testData()"
         
         #    Add your own code here
         
-        attr_TestData_read = "Hello Tango world"
-        attr.set_value(attr_TestData_read)
+        attr_testData_read = "Hello Tango world"
+        attr.set_value(attr_testData_read)
 
 
 #------------------------------------------------------------------
-#    Write TestData attribute
+#    Write testData attribute
 #------------------------------------------------------------------
-    def write_TestData(self, attr):
-        print "In ", self.get_name(), "::write_TestData()"
-        data = []
+    def write_testData(self, attr):
+        print "In ", self.get_name(), "::write_testData()"
+        data=[]
         attr.get_write_value(data)
         print "Attribute value = ", data
 
         #    Add your own code here
+
+
+#------------------------------------------------------------------
+#    Read ActorSelected attribute
+#------------------------------------------------------------------
+    def read_actorSelected(self, attr):
+        #print "In ", self.get_name(), "::read_actorSelected()"
+        
+        #    Add your own code here
+        
+        attr_actorSelected_read = self._strActorSelected
+        attr.set_value(attr_actorSelected_read)
 
 
 
@@ -186,7 +270,16 @@ class WorkflowDS(PyTango.Device_4Impl):
         self._workflowProxyThread.setWorkspacePath("/users/svensson/dawb_workspace")
         self._workflowProxyThread.startJob(argin[0], argin[1])
         # Job id for workflows is always 1
-        return "1"
+        return "1"        
+
+
+#---- startJob command State Machine -----------------
+    def is_startJob_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            #    End of Generated Code
+            #    Re-Start of Generated Code
+            return False
+        return True
 
 
 #------------------------------------------------------------------
@@ -281,69 +374,6 @@ class WorkflowDS(PyTango.Device_4Impl):
         argout = "Not implemented!"        
         return argout
 
-#################################################################################
-# 
-# Py4jWorkfloCallback methonds
-
-    def createUserInput(self, actorName, dictUserValues):
-        print "="*80
-        print "="*80
-        print "Py4jWorkflowCallback.createUserInput: actorName = ", actorName
-        print "Py4jWorkflowCallback.createUserInput: dict = ", dictUserValues
-        returnMap = None
-        if actorName == "Start":
-            java_map = self._gateway_client.jvm.java.util.HashMap()
-            java_map["dataInput"] = self.getDataInput()
-            java_map["defaltValues"] = "false"
-            print java_map
-            returnMap = java_map
-        elif actorName == "End":
-            if "dataOutput" in dictUserValues.keys():
-                self.setDataOutput(dictUserValues["dataOutput"])
-            returnMap = dictUserValues
-        else:
-            # TODO: TANGO callback
-            returnMap = dictUserValues
-#        newDict[unicode("x")] = unicode("2.0")
-#        print "Py4jWorkflowCallback.createUserInput: new dict = ", newDict
-        print "="*80
-        print "="*80
-        return returnMap
-
-    def setActorSelected(self, actorName, isSelected):
-        print "="*80
-        print "="*80
-        print "Py4jWorkflowCallback.setActorSelected: ", actorName, " is selected: ", isSelected
-        print "="*80
-        print "="*80
-    
-    def showMessage(self, strTitle, strMessage, iType):
-        print "="*80
-        print "="*80
-        print "Py4jWorkflowCallback.showMessage: title = ", strTitle
-        print "Py4jWorkflowCallback.showMessage: message = ", strMessage
-        print "Py4jWorkflowCallback.showMessage: iType = ", iType
-        print "="*80
-        print "="*80
-
-    class Java: # IGNORE:W0232
-        implements = ['org.dawb.workbench.jmx.py4j.Py4jWorkflowCallback']
-
-#
-#
-##################################################################################
-
-    def set_jobSuccess(self, _jobId):
-        print "In ", self.get_name(), "::set_jobSuccess()"
-        self.push_change_event("jobSuccess", _jobId)
-        self.set_state(PyTango.DevState.ON)
-
-
-    def set_jobFailure(self, _jobId):
-        print "In ", self.get_name(), "::set_jobFailure()"
-        self.push_change_event("jobFailure", _jobId)
-        self.set_state(PyTango.DevState.ON)
-
 
 #------------------------------------------------------------------
 #    getJobInput command:
@@ -373,6 +403,10 @@ class WorkflowDSClass(PyTango.DeviceClass):
 
     #    Device Properties
     device_property_list = {
+        'WorkspaceLocation':
+            [PyTango.DevString,
+            "Absolute path to the workspace location",
+            [] ],
         }
 
 
@@ -429,6 +463,10 @@ class WorkflowDSClass(PyTango.DeviceClass):
             {
                 'Polling period':100000,
             } ],
+        'actorSelected':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ]],
         }
 
 
