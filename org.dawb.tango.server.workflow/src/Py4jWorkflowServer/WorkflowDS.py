@@ -87,6 +87,11 @@ class WorkflowDS(PyTango.Device_4Impl):
         self.get_device_properties(self.get_device_class())
         self.set_change_event("jobSuccess", True, False)
         self.set_change_event("jobFailure", True, False)
+        db = PyTango.Database()
+        self._strWorkflowLocation = str(db.get_device_property(self.get_name(), "workspaceLocation")["workspaceLocation"][0])
+        self._strPreferredProject = str(db.get_device_property(self.get_name(), "preferredProject")["preferredProject"][0])
+        print self._strWorkflowLocation
+        print self._strPreferredProject
 
 
 #------------------------------------------------------------------
@@ -265,12 +270,21 @@ class WorkflowDS(PyTango.Device_4Impl):
     def startJob(self, argin):
         print "In ", self.get_name(), "::startJob()"
         #    Add your own code here
-        self.set_state(PyTango.DevState.RUNNING)        
-        self._workflowProxyThread = WorkflowProxyThread(self)
-        self._workflowProxyThread.setWorkspacePath("/users/svensson/dawb_workspace")
-        self._workflowProxyThread.startJob(argin[0], argin[1])
-        # Job id for workflows is always 1
-        return "1"        
+        # Check if i preferred project
+        strJobId  = "1"
+        strJobName = argin[0]
+        if not strJobName.endswith(".moml"):
+            strJobName += ".moml"
+        strWorkflowPath = os.path.join(self._strWorkflowLocation, self._strPreferredProject, strJobName)
+        print strWorkflowPath
+        if os.path.exists(strWorkflowPath):
+            self.set_state(PyTango.DevState.RUNNING)        
+            self._workflowProxyThread = WorkflowProxyThread(self)
+            self._workflowProxyThread.setWorkspacePath(self._strWorkflowLocation)
+            self._workflowProxyThread.startJob(strWorkflowPath, argin[1])
+        else:
+            self.set_jobFailure(strJobId)
+        return strJobId
 
 
 #---- startJob command State Machine -----------------
@@ -403,9 +417,13 @@ class WorkflowDSClass(PyTango.DeviceClass):
 
     #    Device Properties
     device_property_list = {
-        'WorkspaceLocation':
+        'workspaceLocation':
             [PyTango.DevString,
             "Absolute path to the workspace location",
+            [] ],
+        'preferredProject':
+            [PyTango.DevString,
+            "Relative path to the workflow preferred project",
             [] ],
         }
 
