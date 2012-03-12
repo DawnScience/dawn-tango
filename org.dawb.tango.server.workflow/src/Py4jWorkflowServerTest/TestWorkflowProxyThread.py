@@ -20,15 +20,6 @@ listTestWorkflows = ["test_sleep.moml", "test_review.moml", "test_message.moml",
 
 class TestWorkflowProxyThread(unittest.TestCase):
     
-    def test_startServer(self):
-        print "test_startServer"
-        workflowProxyThread = WorkflowProxyThread(None)
-        workflowProxyThread.start()
-        self.assertTrue(workflowProxyThread.is_alive(), "Thread is alive")
-        workflowProxyThread.shutdown()
-        self.assertFalse(workflowProxyThread.is_alive(), "Thread is shutdown")
-        return True
-        
 
     def test_connectToGateway(self):
         print "test_connectToGateway"

@@ -27,11 +27,9 @@ class TestWorkflowReview(unittest.TestCase):
         
     def test_runWorkflow(self):
         workflowProxyThread = WorkflowProxyThread(None)
-        workflowProxyThread.start()
         workflowProxyThread.setWorkspacePath(self._strWorkspacePath)
         workflowProxyThread.startJob(self._strPathWorkflow, "XMLinput")
-        workflowProxyThread.synchronizeWorkflow()
-        workflowProxyThread.shutdown()
+        workflowProxyThread.synchronize()
 
 
     def tearDown(self):

@@ -101,16 +101,15 @@ class WorkflowDS(PyTango.Device_4Impl):
         pass
         #print "In ", self.get_name(), "::always_excuted_hook()"
 
-
     def createUserInput(self, actorName, dictUserValues):
         print "="*80
         print "="*80
-        print "Py4jWorkflowCallback.createUserInput: actorName = ", actorName
-        print "Py4jWorkflowCallback.createUserInput: dict = ", dictUserValues
+        print "WorkflowDS.createUserInput: actorName = ", actorName
+        print "WorkflowDS.createUserInput: dictIn = ", dictUserValues
         returnMap = None
         if actorName == "Start":
-            java_map = self._gateway_client.jvm.java.util.HashMap()
-            java_map["dataInput"] = self.getDataInput()
+            java_map = JavaGateway().jvm.java.util.HashMap()
+            java_map["dataInput"] = "10"
             java_map["defaltValues"] = "false"
             print java_map
             returnMap = java_map
@@ -123,6 +122,7 @@ class WorkflowDS(PyTango.Device_4Impl):
             returnMap = dictUserValues
 #        newDict[unicode("x")] = unicode("2.0")
 #        print "Py4jWorkflowCallback.createUserInput: new dict = ", newDict
+        print "WorkflowDS.createUserInput: dictOut = ", returnMap
         print "="*80
         print "="*80
         return returnMap
@@ -131,7 +131,7 @@ class WorkflowDS(PyTango.Device_4Impl):
     def setActorSelected(self, actorName, isSelected):
         print "="*80
         print "="*80
-        print "Py4jWorkflowCallback.setActorSelected: ", actorName, " is selected: ", isSelected
+        print "WorkflowDS.setActorSelected: ", actorName, " is selected: ", isSelected
         if isSelected:
             self._strActorSelected = actorName
             self.push_change_event("actorSelected", actorName)
@@ -142,9 +142,9 @@ class WorkflowDS(PyTango.Device_4Impl):
     def showMessage(self, strTitle, strMessage, iType):
         print "="*80
         print "="*80
-        print "Py4jWorkflowCallback.showMessage: title = ", strTitle
-        print "Py4jWorkflowCallback.showMessage: message = ", strMessage
-        print "Py4jWorkflowCallback.showMessage: iType = ", iType
+        print "WorkflowDS.showMessage: title = ", strTitle
+        print "WorkflowDS.showMessage: message = ", strMessage
+        print "WorkflowDS.showMessage: iType = ", iType
         print "="*80
         print "="*80
 
@@ -273,6 +273,7 @@ class WorkflowDS(PyTango.Device_4Impl):
         # Check if i preferred project
         strJobId  = "1"
         strJobName = argin[0]
+        strDataInput = argin[1]
         if not strJobName.endswith(".moml"):
             strJobName += ".moml"
         strWorkflowPath = os.path.join(self._strWorkflowLocation, self._strPreferredProject, strJobName)
@@ -281,7 +282,7 @@ class WorkflowDS(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.RUNNING)        
             self._workflowProxyThread = WorkflowProxyThread(self)
             self._workflowProxyThread.setWorkspacePath(self._strWorkflowLocation)
-            self._workflowProxyThread.startJob(strWorkflowPath, argin[1])
+            self._workflowProxyThread.startJob(strWorkflowPath, strDataInput)
         else:
             self.set_jobFailure(strJobId)
         return strJobId
