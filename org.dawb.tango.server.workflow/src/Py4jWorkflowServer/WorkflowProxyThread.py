@@ -49,8 +49,10 @@ class WorkflowProxyThread(threading.Thread):
             self._gateway_client.entry_point.runWorkflow()
             self._gateway_client.entry_point.synchronizeWorkflow()
             if self._workflowDS is not None:
+                self._workflowDS.setJobOutput(self.getDataOutput())
                 self._workflowDS.set_jobSuccess(self._jobId)
         except Exception, e:
+            print e
             if self._workflowDS is not None:
                 self._workflowDS.set_jobFailure(self._jobId)            
         finally:

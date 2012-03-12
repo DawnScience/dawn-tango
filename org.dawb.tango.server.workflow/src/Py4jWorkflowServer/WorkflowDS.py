@@ -35,6 +35,13 @@ import PyTango
 import sys, os
 
 
+try:
+    from py4j.java_gateway import JavaGateway
+except ImportError, e:
+    print "Error! Py4j must be installed in Python in order for the WorkflowDS server to work."
+    print "Please see http://py4j.sourceforge.net/install.html for installation instructions."
+    raise
+
 if not "JMX_LOC" in os.environ.keys():
     strCwd = os.getcwd()
     strJmxLoc = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(strCwd)))), "dawn-workflow")
@@ -62,12 +69,12 @@ class WorkflowDS(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Device constructor
 #------------------------------------------------------------------
-    def __init__(self,cl, name):
-        PyTango.Device_4Impl.__init__(self,cl,name)
+    def __init__(self, cl, name):
+        PyTango.Device_4Impl.__init__(self, cl, name)
         WorkflowDS.init_device(self)
         self._strActorSelected = "No actor selected"
         self._strDataInput = ""
-        self._strDataOutput = None
+        self._strDataOutput = "No workflow job executed yet"
         self._strJobSuccess = "No workflow job executed yet"
         self._strJobFailure = "No workflow job executed yet"
 
@@ -106,22 +113,19 @@ class WorkflowDS(PyTango.Device_4Impl):
         print "="*80
         print "WorkflowDS.createUserInput: actorName = ", actorName
         print "WorkflowDS.createUserInput: dictIn = ", dictUserValues
-        returnMap = None
+        returnMap = dictUserValues
         if actorName == "Start":
             java_map = JavaGateway().jvm.java.util.HashMap()
             java_map["dataInput"] = "10"
             java_map["defaltValues"] = "false"
-            print java_map
             returnMap = java_map
         elif actorName == "End":
             if "dataOutput" in dictUserValues.keys():
-                self.setDataOutput(dictUserValues["dataOutput"])
+                self.setJobOutput(dictUserValues["dataOutput"])
             returnMap = dictUserValues
         else:
             # TODO: TANGO callback
             returnMap = dictUserValues
-#        newDict[unicode("x")] = unicode("2.0")
-#        print "Py4jWorkflowCallback.createUserInput: new dict = ", newDict
         print "WorkflowDS.createUserInput: dictOut = ", returnMap
         print "="*80
         print "="*80
@@ -175,7 +179,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Read Attribute Hardware
 #------------------------------------------------------------------
-    def read_attr_hardware(self,data):
+    def read_attr_hardware(self, data):
         pass
         #print "In ", self.get_name(), "::read_attr_hardware()"
 
@@ -234,7 +238,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_testData(self, attr):
         print "In ", self.get_name(), "::write_testData()"
-        data=[]
+        data = []
         attr.get_write_value(data)
         print "Attribute value = ", data
 
@@ -271,7 +275,7 @@ class WorkflowDS(PyTango.Device_4Impl):
         print "In ", self.get_name(), "::startJob()"
         #    Add your own code here
         # Check if i preferred project
-        strJobId  = "1"
+        strJobId = "1"
         strJobName = argin[0]
         strDataInput = argin[1]
         if not strJobName.endswith(".moml"):
@@ -279,11 +283,13 @@ class WorkflowDS(PyTango.Device_4Impl):
         strWorkflowPath = os.path.join(self._strWorkflowLocation, self._strPreferredProject, strJobName)
         print strWorkflowPath
         if os.path.exists(strWorkflowPath):
+            print "-"*80
             self.set_state(PyTango.DevState.RUNNING)        
             self._workflowProxyThread = WorkflowProxyThread(self)
             self._workflowProxyThread.setWorkspacePath(self._strWorkflowLocation)
             self._workflowProxyThread.startJob(strWorkflowPath, strDataInput)
         else:
+            print "+"*80
             self.set_jobFailure(strJobId)
         return strJobId
 
@@ -386,7 +392,7 @@ class WorkflowDS(PyTango.Device_4Impl):
     def getJobOutput(self, argin):
         print "In ", self.get_name(), "::getJobOutput()"
         #    Add your own code here
-        argout = "Not implemented!"        
+        argout = self._strDataOutput 
         return argout
 
 
@@ -400,9 +406,12 @@ class WorkflowDS(PyTango.Device_4Impl):
     def getJobInput(self, argin):
         print "In ", self.get_name(), "::getJobInput()"
         #    Add your own code here
-        argout = "Not implemented!"
+        argout = self._strDataInput
         return argout
 
+
+    def setJobOutput(self, _strDataOutput):
+        self._strDataOutput = _strDataOutput
 
 #==================================================================
 #
