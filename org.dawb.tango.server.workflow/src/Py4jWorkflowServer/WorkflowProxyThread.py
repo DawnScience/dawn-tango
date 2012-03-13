@@ -29,7 +29,8 @@ class WorkflowProxyThread(threading.Thread):
         self._strDataInput = ""
         self._strDataOutput = None
         self._strModelPath = None
-        self._jobId = "0"
+        self._strJobId = None
+        self._strActorSelected = None
         
         
     def run(self):
@@ -37,10 +38,7 @@ class WorkflowProxyThread(threading.Thread):
             # Start the java gateway server
             self.startJavaGatewayServer()   
             # Start the job
-            if self._workflowDS is None:
-                self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
-            else:
-                self._gateway_client.entry_point.setPy4jWorkflowCallback(self._workflowDS)
+            self._gateway_client.entry_point.setPy4jWorkflowCallback(self)
             self._gateway_client.entry_point.setWorkspacePath(self._strWorkspacePath)
             self._gateway_client.entry_point.setModelPath(self._strModelPath)
             self._gateway_client.entry_point.setInstallationPath(self._strInstallationPath)
@@ -50,11 +48,11 @@ class WorkflowProxyThread(threading.Thread):
             self._gateway_client.entry_point.synchronizeWorkflow()
             if self._workflowDS is not None:
                 self._workflowDS.setJobOutput(self.getDataOutput())
-                self._workflowDS.set_jobSuccess(self._jobId)
+                self._workflowDS.set_jobSuccess(self._strJobId)
         except Exception, e:
             print e
             if self._workflowDS is not None:
-                self._workflowDS.set_jobFailure(self._jobId)            
+                self._workflowDS.set_jobFailure(self._strJobId)            
         finally:
             self.shutdownJavaGatewayServer()        
             
@@ -66,7 +64,9 @@ class WorkflowProxyThread(threading.Thread):
     
     def startJob(self, _strModelPath, _strJobArg):
         self._strModelPath = _strModelPath
+        strJobName = os.path.splitext(os.path.basename(self._strModelPath))[0]
         self._strDataInput = _strJobArg
+        self._strJobId = "job_%s_%s" % (strJobName, time.strftime("%Y%H%M%S"))
         self.start()
          
     
@@ -107,7 +107,7 @@ class WorkflowProxyThread(threading.Thread):
     def shutdownJavaGatewayServer(self):
         if self._gateway_client is None:
             self._gateway_client = JavaGateway()
-        self._gateway_client._shutdown_callback_server()
+        #self._gateway_client._shutdown_callback_server()
         self._gateway_client.shutdown()
         self._gateway_client = None
         if self._subprocess is not None:
@@ -118,19 +118,18 @@ class WorkflowProxyThread(threading.Thread):
 
 #################################################################################
 # 
-# Default Py4jWorkfloCallback methonds
+# Py4jWorkfloCallback methonds
 
     def createUserInput(self, actorName, dictUserValues):
         print "="*80
         print "="*80
-        print "Py4jWorkflowCallback.createUserInput: actorName = ", actorName
-        print "Py4jWorkflowCallback.createUserInput: dict = ", dictUserValues
-        returnMap = None
+        print "WorkflowDS.createUserInput: actorName = ", actorName
+        print "WorkflowDS.createUserInput: dictIn = ", dictUserValues
+        returnMap = dictUserValues
         if actorName == "Start":
-            java_map = self._gateway_client.jvm.java.util.HashMap()
+            java_map = JavaGateway().jvm.java.util.HashMap()
             java_map["dataInput"] = self.getDataInput()
             java_map["defaltValues"] = "false"
-            print java_map
             returnMap = java_map
         elif actorName == "End":
             if "dataOutput" in dictUserValues.keys():
@@ -139,31 +138,35 @@ class WorkflowProxyThread(threading.Thread):
         else:
             # TODO: TANGO callback
             returnMap = dictUserValues
-#        newDict[unicode("x")] = unicode("2.0")
-#        print "Py4jWorkflowCallback.createUserInput: new dict = ", newDict
+        print "WorkflowDS.createUserInput: dictOut = ", returnMap
         print "="*80
         print "="*80
         return returnMap
 
+
     def setActorSelected(self, actorName, isSelected):
         print "="*80
         print "="*80
-        print "Py4jWorkflowCallback.setActorSelected: ", actorName, " is selected: ", isSelected
+        print "WorkflowDS.setActorSelected: ", actorName, " is selected: ", isSelected
+        if isSelected:
+            self._strActorSelected = actorName
+            if self._workflowDS is not None:
+                self._workflowDS.push_change_event("actorSelected", actorName)
         print "="*80
         print "="*80
-    
+
+
     def showMessage(self, strTitle, strMessage, iType):
         print "="*80
         print "="*80
-        print "Py4jWorkflowCallback.showMessage: title = ", strTitle
-        print "Py4jWorkflowCallback.showMessage: message = ", strMessage
-        print "Py4jWorkflowCallback.showMessage: iType = ", iType
+        print "WorkflowDS.showMessage: title = ", strTitle
+        print "WorkflowDS.showMessage: message = ", strMessage
+        print "WorkflowDS.showMessage: iType = ", iType
         print "="*80
         print "="*80
 
     class Java: # IGNORE:W0232
         implements = ['org.dawb.workbench.jmx.py4j.Py4jWorkflowCallback']
-
 
 #
 #
@@ -176,5 +179,12 @@ class WorkflowProxyThread(threading.Thread):
     def getDataOutput(self):
         return self._strDataOutput
 
-    def setDataOutput(self, _strDataOutput):
-        self._strDataOutput = _strDataOutput
+    def setDataOutput(self, _dataOutput):
+        print "In WorkflowProxyThread::getJobOutput()"
+        print _dataOutput
+        print str(_dataOutput)
+        self._strDataOutput = str(_dataOutput)
+        print self._strDataOutput
+        
+    def getJobId(self):
+        return self._strJobId

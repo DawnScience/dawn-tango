@@ -32,7 +32,7 @@
 
 
 import PyTango
-import sys, os
+import sys, os, datetime, time
 
 
 try:
@@ -77,6 +77,7 @@ class WorkflowDS(PyTango.Device_4Impl):
         self._strDataOutput = "No workflow job executed yet"
         self._strJobSuccess = "No workflow job executed yet"
         self._strJobFailure = "No workflow job executed yet"
+        self._workflowProxyThread = None
 
 #------------------------------------------------------------------
 #    Device destructor
@@ -108,56 +109,12 @@ class WorkflowDS(PyTango.Device_4Impl):
         pass
         #print "In ", self.get_name(), "::always_excuted_hook()"
 
-    def createUserInput(self, actorName, dictUserValues):
-        print "="*80
-        print "="*80
-        print "WorkflowDS.createUserInput: actorName = ", actorName
-        print "WorkflowDS.createUserInput: dictIn = ", dictUserValues
-        returnMap = dictUserValues
-        if actorName == "Start":
-            java_map = JavaGateway().jvm.java.util.HashMap()
-            java_map["dataInput"] = "10"
-            java_map["defaltValues"] = "false"
-            returnMap = java_map
-        elif actorName == "End":
-            if "dataOutput" in dictUserValues.keys():
-                self.setJobOutput(dictUserValues["dataOutput"])
-            returnMap = dictUserValues
-        else:
-            # TODO: TANGO callback
-            returnMap = dictUserValues
-        print "WorkflowDS.createUserInput: dictOut = ", returnMap
-        print "="*80
-        print "="*80
-        return returnMap
-
-
-    def setActorSelected(self, actorName, isSelected):
-        print "="*80
-        print "="*80
-        print "WorkflowDS.setActorSelected: ", actorName, " is selected: ", isSelected
-        if isSelected:
-            self._strActorSelected = actorName
-            self.push_change_event("actorSelected", actorName)
-        print "="*80
-        print "="*80
-
-
-    def showMessage(self, strTitle, strMessage, iType):
-        print "="*80
-        print "="*80
-        print "WorkflowDS.showMessage: title = ", strTitle
-        print "WorkflowDS.showMessage: message = ", strMessage
-        print "WorkflowDS.showMessage: iType = ", iType
-        print "="*80
-        print "="*80
-
-    class Java: # IGNORE:W0232
-        implements = ['org.dawb.workbench.jmx.py4j.Py4jWorkflowCallback']
 
 
     def set_jobSuccess(self, _jobId):
         print "In ", self.get_name(), "::set_jobSuccess()"
+        self._strJobSuccess = _jobId
+        print _jobId
         self.push_change_event("jobSuccess", _jobId)
         self._strActorSelected = "No workflow running"
         self.push_change_event("actorSelected", self._strActorSelected)
@@ -166,6 +123,7 @@ class WorkflowDS(PyTango.Device_4Impl):
 
     def set_jobFailure(self, _jobId):
         print "In ", self.get_name(), "::set_jobFailure()"
+        self._strJobFailure = _jobId
         self.push_change_event("jobFailure", _jobId)
         self._strActorSelected = "No workflow running"
         self.push_change_event("actorSelected", self._strActorSelected)
@@ -275,7 +233,6 @@ class WorkflowDS(PyTango.Device_4Impl):
         print "In ", self.get_name(), "::startJob()"
         #    Add your own code here
         # Check if i preferred project
-        strJobId = "1"
         strJobName = argin[0]
         strDataInput = argin[1]
         if not strJobName.endswith(".moml"):
@@ -287,7 +244,10 @@ class WorkflowDS(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.RUNNING)        
             self._workflowProxyThread = WorkflowProxyThread(self)
             self._workflowProxyThread.setWorkspacePath(self._strWorkflowLocation)
+            self.set_jobSuccess("None")
+            self.set_jobFailure("None")
             self._workflowProxyThread.startJob(strWorkflowPath, strDataInput)
+            strJobId = self._workflowProxyThread.getJobId()
         else:
             print "+"*80
             self.set_jobFailure(strJobId)
