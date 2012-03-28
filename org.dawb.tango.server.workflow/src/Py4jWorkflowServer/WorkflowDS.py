@@ -163,7 +163,7 @@ class WorkflowDS(PyTango.Device_4Impl):
         
         #    Add your own code here
         
-        attr_JobFailure_read = self.strJobFailure
+        attr_JobFailure_read = self._strJobFailure
         attr.set_value(attr_JobFailure_read)
 
 
