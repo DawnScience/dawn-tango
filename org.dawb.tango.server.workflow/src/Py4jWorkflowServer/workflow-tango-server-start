@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Check that we have one and only one argument: the name of the edna server
+if [ $# -ne 1 ]; then
+    echo "Usage: $(basename $0) name-of-workflow-tango-server"
+    exit 1
+fi
+
+# Find the process id of WorkflowDS running the enda server name given as argument
+processId=`ps aux |grep WorkflowDS | grep $1 | grep -v $0 | grep -v grep | awk '{print $2}'`
+if [ "$processId" != "" ];then
+  echo "workflow tango server '$1' is already running!"
+  exit 0
+fi
+
+
+# Check if notifd is started - needed for TANGO events
+testit=$(pgrep notifd)
+if [ "$testit" = "" ]; then
+  # Check if notifd is installed
+  pathToNotifd=$(command -v notifd)
+  if [ "$pathToNotifd" = "" ]; then
+    echo "ERROR! Cannot locate notifd needed for TANGO events!"
+    exit 1
+  fi
+  notifd -n >>/dev/null 2>&1 & 
+  sleep 1
+fi
+# Run notifd2db
+pathToNotifd2db=$(command -v notifd2db)
+if [ "$pathToNotifd2db" = "" ]; then
+  # Try local TANGO installation
+  export PATH=/usr/lib/tango:$PATH
+  pathToNotifd2db=$(command -v notifd2db)
+  if [ "$pathToNotifd2db" = "" ]; then
+    echo "ERROR! Cannot locate notifd2db needed for TANGO events!"
+    exit 1
+  fi
+fi
+notifd2db
+sleep 1
+
+if [ ! -d ${HOME}/log ];
+then
+  mkdir ${HOME}/log
+fi
+now=$(date +"%Y%m%dT%H%M%S")
+
+baseLog=/tmp
+export TestSpace=$baseLog/workflow-$now
+export log=${HOME}/log/tango-workflow-${now}
+if [ ! -d ${TestSpace} ]; then
+  mkdir ${TestSpace}
+fi
+
+PythonProg=$(dirname $0)/WorkflowDS.py
+cd $TestSpace
+nohup $PYTHON $PythonProg ${1:+"$@"} > ${HOME}/log/workflow-tango-$(date +"%Y%m%dT%H%M%S").log 2>&1 &

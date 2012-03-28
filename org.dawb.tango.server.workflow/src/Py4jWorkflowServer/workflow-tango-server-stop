@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Check that we have one and only one argument: the name of the workflow server
+if [ $# -ne 1 ]; then
+    echo "Usage: $(basename $0) name-of-workflow-tango-server"
+    exit 1
+fi
+
+# Find the process id of WorkflowDS running the enda server name given as argument
+processId=`ps aux |grep WorkflowDS | grep $1 | grep -v $0 | grep -v grep | awk '{print $2}'`
+if [ "$processId" = "" ];then
+  echo "workflow tango server '$1' is not running" 
+else 
+  kill $processId
+  sleep 1
+  # Check that the process is terminated
+  processId=`ps aux |grep tango-EdnaDS | grep $1 | grep -v $0 | grep -v grep | awk '{print $2}'`
+  if [ "$processId" = "" ];then
+	echo "workflow tango server '$1' with process id $processId terminated"
+  else
+    # Kill it with the big hammer
+    kill -9 $processId
+	echo "workflow tango server '$1' with process id $processId terminated with signal 9"
+  fi
+fi
