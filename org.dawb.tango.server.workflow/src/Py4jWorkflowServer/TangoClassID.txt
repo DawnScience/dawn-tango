@@ -1,0 +1,11 @@
+/**
+ * Device Class Identification:
+ * 
+ * Class Name   :	WorkflowDS
+ * Contact      :	svensson@esrf.fr
+ * Class Family :	Miscellaneous
+ * Platform     :	
+ * Bus          :	
+ * Manufacturer :	none
+ * Reference    :	
+ */
