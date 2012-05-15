@@ -107,7 +107,7 @@ public class SharedMemoryEditor extends EditorPart {
 		              : PlotType.PT1D;
 		this.isHistoryMode = Activator.getDefault().getPreferenceStore().getBoolean(SharedConstants.HISTORY_MODE);
 		try {
-	        this.plottingSystem = PlottingFactory.getPlottingSystem();
+	        this.plottingSystem = PlottingFactory.createPlottingSystem();
 	        plottingSystem.setColorOption(ColorOption.NONE);
 	        plottingSystem.setDatasetChoosingRequired(false);
 		} catch (Exception ne) {
