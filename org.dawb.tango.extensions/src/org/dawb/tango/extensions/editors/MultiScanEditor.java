@@ -84,7 +84,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 		
 		this.isDefaultConnectedSpec = isConnectedSpec;
 		try {
-			this.plottingSystem = PlottingFactory.getPlottingSystem();
+			this.plottingSystem = PlottingFactory.createPlottingSystem();
 			plottingSystem.setColorOption(ColorOption.BY_DATA);
 		} catch (Exception e) {
 			logger.error("Cannot locate any plotting systems!", e);
