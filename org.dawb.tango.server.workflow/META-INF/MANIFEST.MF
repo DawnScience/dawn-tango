@@ -12,3 +12,4 @@ Import-Package: org.apache.log4j;version="1.2.15",
 Bundle-ClassPath: .,
  TangORB-7.4.3.jar,
  org.apache.log4j_1.2.14.jar
+Require-Bundle: org.eclipse.jface;bundle-version="3.7.0"

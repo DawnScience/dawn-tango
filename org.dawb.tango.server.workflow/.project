@@ -3,6 +3,7 @@
 	<name>org.dawb.tango.server.workflow</name>
 	<comment></comment>
 	<projects>
+		<project>org.dawb.workbench.jmx</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
