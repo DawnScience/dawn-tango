@@ -32,6 +32,9 @@
 package WorkflowExecutor;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,6 +45,7 @@ import org.dawb.workbench.jmx.IRemoteWorkbench;
 import org.dawb.workbench.jmx.UserInputBean;
 import org.dawb.workbench.jmx.service.IWorkflowService;
 import org.dawb.workbench.jmx.service.WorkflowFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.omg.CORBA.SystemException;
 import org.omg.CORBA.UserException;
 import org.slf4j.Logger;
@@ -146,6 +150,10 @@ public class WorkflowExecutor extends DeviceImpl implements TangoConst
 	protected IWorkflowService service;
 	
 	public String runningActorName = "No actor running";
+
+	private boolean tangoSpecMockMode = true;
+	
+	private String workflowLog = "";
 
 
 //=========================================================
@@ -342,9 +350,11 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	public void start(String[] argin) throws DevFailed
 	{
 		get_logger().info("Entering start()");
+		
+		workflowLog = "";
 
 		if (argin.length > 1) {
-			if (argin[0].equals("ModelPath")) {
+			if (argin[0].equals("modelpath")) {
 				this.modelPath = argin[1];
 			}
 		}
@@ -515,36 +525,36 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public String[] get_scalar_values_map() throws DevFailed
 	{
-		int length = this.scalarValues.size() * 2;
-		String[]	argout = new String[length];
-
 		get_logger().info("Entering get_scalar_values_map()");
 
-		// ---Add your Own code to control device here ---
+		String[]	argout = new String[0];
 		
-		/*copy the contents of the scalarValues map into a string array, alternating keys and values*/
-		Iterator<String> keys_iterator = this.scalarValues.keySet().iterator();
-		
-		int current_index = 0;
-		while(keys_iterator.hasNext()) {
-			String key = keys_iterator.next();
-			argout[current_index] = key;
-			argout[current_index + 1] = this.scalarValues.get(key);
-			current_index += 2;
+		if (this.scalarValues != null) {
+			int length = this.scalarValues.size() * 2;
+			 argout = new String[length];
+	
+	
+			// ---Add your Own code to control device here ---
+			
+			/*copy the contents of the scalarValues map into a string array, alternating keys and values*/
+			Iterator<String> keys_iterator = this.scalarValues.keySet().iterator();
+			
+			int current_index = 0;
+			while(keys_iterator.hasNext()) {
+				String key = keys_iterator.next();
+				argout[current_index] = key;
+				argout[current_index + 1] = this.scalarValues.get(key);
+				current_index += 2;
+			}
+	
+			get_logger().info("Exiting get_scalar_values_map()");
 		}
-
-		get_logger().info("Exiting get_scalar_values_map()");
 		return argout;
 	}
 	
 	public Map<String,String> getScalarValues() {
 		return this.outScalarValues;
 	}
-
-
-
-
-
 //=========================================================
 /**
  *	Execute command "SetScalarValuesMap" on device.
@@ -552,8 +562,10 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
  * @param	argin	Set value for the review data
  */
 //=========================================================
-public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
+	public void set_scalar_values_map(String[] argin) throws DevFailed
 	{
+		get_logger().info("Entering set_scalar_values_map()");
+
 		int noValues = argin.length / 2;
 	
 		set_state(DevState.RUNNING);
@@ -589,22 +601,22 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 /**
  *	Execute command "GetAvailableWorkflows" on device.
  *
- * @return	List of available workflows
+ * @return	XML string of available workflows
  */
 //=========================================================
-	public String[] get_available_workflows() throws DevFailed
+	public String get_available_workflows() throws DevFailed
 	{
-		String[]	argout = null;
+		String	argout = new String();
 
 		get_logger().info("Entering get_available_workflows()");
 
 		if (this.availableModelPaths == null) {
-			argout = new String[1];
-			argout[0] = "No workflow model paths configured";
+			argout = "<workflows></workflows>";
 		} else {
-			argout = this.availableModelPaths;
+			for (String xmlLine:this.availableModelPaths)
+				argout += xmlLine + "\n";
 		}
-		
+		get_logger().info("Available workflows: "+ argout);
 		get_logger().info("Exiting get_available_workflows()");
 		return argout;
 	}
@@ -628,6 +640,120 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 	}
 
 
+//=========================================================
+/**
+ *	Execute command "SetTangoSpecMockMode" on device.
+ *	Sets the TANGO Spec mock mode on or off
+ *
+ * @param	argin	setTangoSpecMockMode
+ */
+//=========================================================
+	public void set_tango_spec_mock_mode(boolean argin) throws DevFailed
+	{
+		get_logger().info("Entering set_tango_spec_mock_mode()");
+
+		get_logger().info("Setting TANGO Spec Mock Mode to: "+argin);
+		this.tangoSpecMockMode = argin;
+		// Store the mock mode in the workspace
+		get_logger().info("Exiting set_tango_spec_mock_mode()");
+	}
+
+
+//=========================================================
+/**
+ *	Execute command "IsTangoSpecMockMode" on device.
+ *	Returns the state of TANGO Spec mock mode
+ *
+ * @return	
+ */
+//=========================================================
+	public boolean is_tango_spec_mock_mode() throws DevFailed
+	{
+		boolean	argout = tangoSpecMockMode;
+
+		get_logger().info("Entering is_tango_spec_mock_mode()");
+
+		get_logger().info("TANGO Spec Mock Mode is: "+argout);
+
+		get_logger().info("Exiting is_tango_spec_mock_mode()");
+		return argout;
+	}
+
+//=========================================================
+/**
+ *	Execute command "GetWorkflowLog" on device.
+ *
+ * @return	Total log of the current workflow
+ */
+//=========================================================
+	public String get_workflow_log() throws DevFailed
+	{
+		String	argout = new String();
+
+		get_logger().info("Entering get_workflow_log()");
+		
+		argout = read_log_file();
+		
+		get_logger().info("Exiting get_workflow_log()");
+		return argout;
+	}
+
+//=========================================================
+/**
+ *	Execute command "GetWorkflowLogIncremental" on device.
+ *
+ * @return	Incremental log of the current workflow 
+ */
+//=========================================================
+	public String get_workflow_log_incremental() throws DevFailed
+	{
+		String	argout = new String();
+
+		get_logger().debug("Entering get_workflow_log_incremental()");
+		get_logger().debug("Length of workflowLog: "+workflowLog.length());
+		
+		int startIndex = workflowLog.length();
+		workflowLog = read_log_file();
+		int endIndex = workflowLog.length();
+		get_logger().debug("Start index: "+startIndex+", end index:"+endIndex);
+		argout = workflowLog.substring(startIndex, endIndex);
+		
+		get_logger().debug("Length of argout: "+argout.length());
+
+		get_logger().debug("Exiting get_workflow_log_incremental()");
+		return argout;
+	}
+
+
+	private String read_log_file() {
+		String argout = "";
+		//File logFile = new File(this.workspacePath+"/log/workbench.log");
+		File logFile = new File(System.getProperty("user.home")+"/.dawb/workflow_executor.log");
+		if (logFile.exists()) {
+			try {
+				get_logger().info("Log file "+logFile.getAbsolutePath()+" exists!");
+				FileReader input;
+				input = new FileReader(logFile);
+				BufferedReader bufRead = new BufferedReader(input);
+				
+				String line = bufRead.readLine();
+				while (line != null){
+					if (!line.contains("workflow error")) {
+						argout += line + "\n";
+					}
+					line = bufRead.readLine();
+				}
+				bufRead.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} else {
+			get_logger().warn("Log file "+logFile.getAbsolutePath()+" doesn't exist!");
+		}
+		return argout;
+	}
 
 
 //=========================================================
@@ -698,22 +824,26 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 
 		@Override
 		public String getModelPath() {
-			return this.workflowExecutorInstance.workspacePath + "/" + this.workflowExecutorInstance.modelPath;
+			String modelPath = this.workflowExecutorInstance.workspacePath + "/" + this.workflowExecutorInstance.modelPath;
+			logger.info("Model path:"+modelPath);
+			return modelPath;
 		}
 
 		@Override
 		public String getInstallationPath() {
+			logger.info("Installation path:"+this.workflowExecutorInstance.installationPath);
 			return this.workflowExecutorInstance.installationPath;
 		}
 
 		@Override
 		public boolean getTangoSpecMockMode() {
-			return true;
+			logger.info("TANGO Spec Mock Mode:"+this.workflowExecutorInstance.tangoSpecMockMode);
+			return this.workflowExecutorInstance.tangoSpecMockMode;
 		}
 
 		@Override
 		public boolean getServiceTerminate() {
-			// TODO Auto-generated method stub
+			// Always force termination!
 			return true;
 		}
 
@@ -738,7 +868,7 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 		}
 
 		@Override
-		public boolean monitorDirectory(String fullPath, final boolean startMonitoring) {
+		public boolean monitorDirectory(String fullPath, boolean startMonitoring) {
 			logger.info("Directory Monitor Requested");
 			logger.info("Path "+fullPath);
 			return true;
@@ -755,8 +885,22 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 		public boolean showMessage(String title, String message, int type) {
 			logger.info("Show Message Requested");
 			logger.info("Title "+title+"; message "+message);
+			String typeString = null;
+			switch (type) {
+			case MessageDialog.ERROR:       typeString = "error";       break;
+			case MessageDialog.WARNING:     typeString = "warning";     break;
+			case MessageDialog.INFORMATION: typeString = "info";        break;
+			}
+			String xmlMessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			xmlMessage += "<message>\n";
+			xmlMessage += "  <type>"+typeString+"</type>\n";
+			xmlMessage += "  <text>"+message+"</text>\n";
+			xmlMessage += "</message>\n";
+			logger.debug("XML message: "+xmlMessage);
 			try {
-				this.workflowExecutorInstance.setStatusToOpen(title, true, message, null);
+				// Sleep 0.5s in order to allow polling with a frequency > 1 ms...
+				Thread.sleep(500);
+				this.workflowExecutorInstance.setStatusToOpen(title, true, xmlMessage, null);
 				while (! this.workflowExecutorInstance.hasReviewData() && this.workflowExecutorInstance.get_state() == DevState.OPEN) {
 					Thread.sleep(500);// User is pressing ok...
 				}
@@ -780,17 +924,16 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 			logger.info("Actor "+bean.getPartName());
 			final Map<String,String> ret = new HashMap<String,String>(0);
 			try {
-				
 				// TODO bean also has isSilent to know if user configured actor
 				// to be silent (i.e. no UI) when it runs. On the Java client
 				// this simply means there is no dialog shown and the default
 				// values are used.
+				// Sleep 0.5s in order to allow polling with a frequency > 1 ms...
+				Thread.sleep(500);
 				this.workflowExecutorInstance.setStatusToOpen(bean.getPartName(),
 															bean.isDialog(), 
 															bean.getConfigurationXML(),
 															bean.getScalarValues());
-				
-				
 				while (! this.workflowExecutorInstance.hasReviewData() && this.workflowExecutorInstance.get_state() == DevState.OPEN) {
 					Thread.sleep(500);// User is pressing ok...
 				}
@@ -892,7 +1035,7 @@ public synchronized void set_scalar_values_map(String[] argin) throws DevFailed
 		logger.info("After creating thread");
 		
 		// Always name your threads, this makes debugging easier
-		workflowThread.setName("Amoeba Workflow Thead");
+		workflowThread.setName("Workflow Thread");
 
 		// Use start method to start a new thread.
 		workflowThread.start();

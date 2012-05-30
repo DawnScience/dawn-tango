@@ -6,9 +6,9 @@
 // Description:  Java source code for the command TemplateClass of the
 //               WorkflowExecutor class.
 //
-// $Author: $
+// $Author: pascal_verdier $
 //
-// $Revision: $
+// $Revision: 9742 $
 //
 // $Log$
 //
@@ -27,8 +27,8 @@
 
 
 /**
- * @author	$Author: $
- * @version	$Revision: $
+ * @author	$Author: pascal_verdier $
+ * @version	$Revision: 9742 $
  */
 package WorkflowExecutor;
 
@@ -40,29 +40,29 @@ import fr.esrf.TangoDs.*;
 
 /**
  *	Class Description:
- *	Resumes a paused workflow. Only allowed if the device server is in the "STANDBY" state.
+ *	Sets the TANGO Spec mock mode on or off
 */
 
 
-public class ResumeClass extends Command implements TangoConst
+public class SetTangoSpecMockModeCmd extends Command implements TangoConst
 {
 	//===============================================================
 	/**
-	 *	Constructor for Command class ResumeClass
+	 *	Constructor for Command class SetTangoSpecMockModeCmd
 	 *
 	 *	@param	name	command name
 	 *	@param	in	argin type
 	 *	@param	out	argout type
 	 */
 	//===============================================================
-	public ResumeClass(String name,int in,int out)
+	public SetTangoSpecMockModeCmd(String name,int in,int out)
 	{
 		super(name, in, out);
 	}
 
 	//===============================================================
 	/**
-	 *	Constructor for Command class ResumeClass
+	 *	Constructor for Command class SetTangoSpecMockModeCmd
 	 *
 	 *	@param	name            command name
 	 *	@param	in              argin type
@@ -71,13 +71,13 @@ public class ResumeClass extends Command implements TangoConst
 	 *	@param	out_comments    argout description
 	 */
 	//===============================================================
-	public ResumeClass(String name,int in,int out, String in_comments, String out_comments)
+	public SetTangoSpecMockModeCmd(String name,int in,int out, String in_comments, String out_comments)
 	{
 		super(name, in, out, in_comments, out_comments);
 	}
 	//===============================================================
 	/**
-	 *	Constructor for Command class ResumeClass
+	 *	Constructor for Command class SetTangoSpecMockModeCmd
 	 *
 	 *	@param	name            command name
 	 *	@param	in              argin type
@@ -87,7 +87,7 @@ public class ResumeClass extends Command implements TangoConst
 	 *	@param	level           The command display type OPERATOR or EXPERT
 	 */
 	//===============================================================
-	public ResumeClass(String name,int in,int out, String in_comments, String out_comments, DispLevel level)
+	public SetTangoSpecMockModeCmd(String name,int in,int out, String in_comments, String out_comments, DispLevel level)
 	{
 		super(name, in, out, in_comments, out_comments, level);
 	}
@@ -98,8 +98,9 @@ public class ResumeClass extends Command implements TangoConst
 	//===============================================================
 	public Any execute(DeviceImpl device,Any in_any) throws DevFailed
 	{
-		Util.out2.println("ResumeClass.execute(): arrived");
-		((WorkflowExecutor)(device)).resume();
+		Util.out2.println("SetTangoSpecMockModeCmd.execute(): arrived");
+		boolean argin = extract_DevBoolean(in_any);
+		((WorkflowExecutor)(device)).set_tango_spec_mock_mode(argin);
 		return insert();
 	}
 
@@ -110,9 +111,10 @@ public class ResumeClass extends Command implements TangoConst
 	//===============================================================
 	public boolean is_allowed(DeviceImpl device, Any data_in)
 	{
-		if (device.get_state() == DevState.ON  ||
-			device.get_state() == DevState.RUNNING  ||
-			device.get_state() == DevState.FAULT)
+		if (device.get_state() == DevState.RUNNING  ||
+			device.get_state() == DevState.STANDBY  ||
+			device.get_state() == DevState.FAULT  ||
+			device.get_state() == DevState.OPEN)
 		{
 			//	End of Generated Code
 

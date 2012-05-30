@@ -112,8 +112,7 @@ public class PauseClass extends Command implements TangoConst
 	{
 		if (device.get_state() == DevState.ON  ||
 			device.get_state() == DevState.STANDBY  ||
-			device.get_state() == DevState.FAULT  ||
-			device.get_state() == DevState.EXTRACT)
+			device.get_state() == DevState.FAULT)
 		{
 			//	End of Generated Code
 

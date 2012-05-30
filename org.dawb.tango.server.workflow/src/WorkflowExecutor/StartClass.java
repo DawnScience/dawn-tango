@@ -114,8 +114,7 @@ public class StartClass extends Command implements TangoConst
 	{
 		if (device.get_state() == DevState.RUNNING  ||
 			device.get_state() == DevState.STANDBY  ||
-			device.get_state() == DevState.FAULT  ||
-			device.get_state() == DevState.EXTRACT)
+			device.get_state() == DevState.FAULT)
 		{
 			//	End of Generated Code
 

@@ -158,14 +158,34 @@ public class WorkflowExecutorClass extends DeviceClass implements TangoConst
 			"",
 			DispLevel.OPERATOR));
 		command_list.addElement(new GetAvailableWorkflowsClass("GetAvailableWorkflows",
-			Tango_DEV_VOID, Tango_DEVVAR_STRINGARRAY,
+			Tango_DEV_VOID, Tango_DEV_STRING,
 			"",
-			"List of available workflows",
+			"XML string of available workflows",
 			DispLevel.OPERATOR));
 		command_list.addElement(new IsDialogClass("IsDialog",
 			Tango_DEV_VOID, Tango_DEV_BOOLEAN,
 			"",
 			"Boolean for dialog",
+			DispLevel.OPERATOR));
+		command_list.addElement(new SetTangoSpecMockModeCmd("SetTangoSpecMockMode",
+			Tango_DEV_BOOLEAN, Tango_DEV_VOID,
+			"setTangoSpecMockMode",
+			"",
+			DispLevel.OPERATOR));
+		command_list.addElement(new IsTangoSpecMockModeClass("IsTangoSpecMockMode",
+			Tango_DEV_VOID, Tango_DEV_BOOLEAN,
+			"",
+			"",
+			DispLevel.OPERATOR));
+		command_list.addElement(new GetWorkflowLogClass("GetWorkflowLog",
+			Tango_DEV_VOID, Tango_DEV_STRING,
+			"",
+			"Total log of the current workflow",
+			DispLevel.OPERATOR));
+		command_list.addElement(new GetWorkflowLogIncrementalClass("GetWorkflowLogIncremental",
+			Tango_DEV_VOID, Tango_DEV_STRING,
+			"",
+			"Incremental log of the current workflow ",
 			DispLevel.OPERATOR));
 
 		//	add polling if any
