@@ -12,12 +12,10 @@ package org.dawb.tango.server.workflow.test;
 /**
  *   Example of a client using the TANGO Api
  */
-import org.dawb.workbench.jmx.service.WorkflowFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import WorkflowExecutor.WorkflowExecutor;
-import WorkflowExecutor.WorkflowExecutor.TangoServerServiceProvider;
 import fr.esrf.Tango.*;
 import fr.esrf.TangoDs.*;
 import fr.esrf.TangoApi.*;
@@ -25,7 +23,7 @@ import fr.esrf.TangoApi.*;
 public class TestRunWorkflow
 {
 	private static final Logger logger = LoggerFactory.getLogger(WorkflowExecutor.class);
-	public String[] availableWorkflows = null;
+	public String availableWorkflows = null;
 	public static DeviceProxy dev = null;
 	
 	public void testSuite() throws DevFailed {
@@ -36,7 +34,7 @@ public class TestRunWorkflow
 	}
 	
 	private void testEDNAActor() throws DevFailed {
-		String[] arg0 = {"ModelPath","common/tests/test_characterisation.moml"};
+		String[] arg0 = {"modelpath","common/tests/test_characterisation.moml"};
 		DeviceData argin = new DeviceData();
 		argin.insert(arg0);
     	logger.debug("Starting test_characterisation.moml workflow");
@@ -51,13 +49,13 @@ public class TestRunWorkflow
 
 	
 	private void testPythonActor() throws DevFailed {
-		String[] arg0 = {"ModelPath","common/tests/test_python_actor.moml"};
+		String[] arg0 = {"modelpath","common/tests/test_python_actor.moml"};
 		DeviceData argin = new DeviceData();
 		argin.insert(arg0);
     	logger.debug("Starting test_python_actor workflow");
         DeviceData argout = dev.command_inout("Start", argin);
     	logger.debug("Workflow started");
-        String[] scalarValues = makeDataExchange(new String[]{"x","10"}, 100000);
+        String[] scalarValues = makeDataExchange(new String[]{"x1","10"}, 100000);
         for (String scalarValue: scalarValues) {
         	logger.info(scalarValue);
         }
@@ -99,9 +97,10 @@ public class TestRunWorkflow
 		        	logger.debug("Waiting for state");
 			        while (!receivedState.equals(desiredState)) {
 			        	Thread.sleep(1000);
+			        	DeviceAttribute runningActorName = dev.read_attribute("RunningActorName");
 			        	stateAttribute = dev.read_attribute("StateAttribute");
 				        receivedState = stateAttribute.extractDevState();
-			        	logger.debug("Still waiting state");
+			        	logger.debug("Still waiting state, actor running: "+runningActorName.extractString());
 			        }
 		        	logger.debug("Server in desired state");
 				} catch (Exception ne) {
@@ -141,10 +140,9 @@ public class TestRunWorkflow
 
 	public void getAvailableWorflows() throws DevFailed {
 		DeviceData argout = dev.command_inout("GetAvailableWorkflows");
-		this.availableWorkflows = argout.extractStringArray();
+		this.availableWorkflows = argout.extractString();
 		logger.info("Available workflows:");
-		for (String workflowName : this.availableWorkflows)
-			logger.info(workflowName);
+		logger.info(this.availableWorkflows);
 	}
 	
 	public static void main (String args[])
