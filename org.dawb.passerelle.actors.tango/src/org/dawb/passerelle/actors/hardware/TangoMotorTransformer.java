@@ -82,6 +82,7 @@ public class TangoMotorTransformer extends AbstractDataMessageTransformer {
 		    
 	    	if (cont == null) {
 		    	comp.putScalar("error_messsage", "No motors configured, '"+getName()+"' did nothing.");
+		    	logInfo("No motors configured.");
 		    	return comp;
 		    }
 		    
@@ -122,10 +123,12 @@ public class TangoMotorTransformer extends AbstractDataMessageTransformer {
 			try {
 				final TangoConnection connection = TangoConnectionFactory.openConnection(baseUri, attribute);
 				if (value!=null) {
+					logInfo("Setting position for "+mb.getMotorName()+ " to : "+value.extractDouble());
 					connection.setValue(value);	// Uses remote call for MockMode				
 				}
 				try {				
 					value = connection.getValue();
+					logInfo("Motor position for "+mb.getMotorName()+ " is : "+value.extractDouble());
 				} catch (Exception ne) {
 					logger.debug("Error in TangoMotorTransformer "+getName());
 					logger.debug("Error message: "+ne.getMessage());

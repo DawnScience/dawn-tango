@@ -141,7 +141,7 @@ public class TangoCommandTransformer extends AbstractDataMessageTransformer impl
 
 		if (commands.isEmpty()) return false;
 		
-		logger.info("Running macro '"+resource.getLocation().toOSString()+"'");
+		logInfo("Running SPEC macro : '"+resource.getLocation().toOSString()+"'");
 		final String     hardwareURI = TangoUtils.getSpecCommandAddress();
 		TangoConnection  connection	 = null;	
 		try {
