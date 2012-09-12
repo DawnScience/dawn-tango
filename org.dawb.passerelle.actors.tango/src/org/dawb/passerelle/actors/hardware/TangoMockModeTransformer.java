@@ -125,7 +125,7 @@ public class TangoMockModeTransformer extends AbstractDataMessageTransformer {
 		try {
 			String tangoMockModeScalar = null;
 			boolean tangoMockMode = TangoConnectionFactory.isMockMode();
-			logger.info("Actor \""+getName()+"\": initial TANGO mock mode set to "+tangoMockMode);
+			logger.debug("Actor \""+getName()+"\": initial TANGO mock mode set to "+tangoMockMode);
 			boolean tangoMockModeNew = tangoMockMode;
 			// Try to read upstream variable name tangoMockModeVariableName
 			for (DataMessageComponent dataMessageComponent : cache) {
@@ -133,7 +133,7 @@ public class TangoMockModeTransformer extends AbstractDataMessageTransformer {
 					for (String name : dataMessageComponent.getScalar().keySet()) {						
 						if (name.equals(tangoMockModeVariableName)) {
 							tangoMockModeScalar = dataMessageComponent.getScalar().get(name);
-							logger.info("Actor \""+getName()+"\": TANGO mock mode variable "+tangoMockModeVariableName+" set to "+tangoMockModeScalar);
+							logger.debug("Actor \""+getName()+"\": TANGO mock mode variable "+tangoMockModeVariableName+" set to "+tangoMockModeScalar);
 						}
 					}
 				}
@@ -141,6 +141,7 @@ public class TangoMockModeTransformer extends AbstractDataMessageTransformer {
 			// Action of actor depending on actorModeParameter
 			if (actorModeParameter.getExpression().equals(ACTOR_MODE.get(0))) {
 				// Just read the mock mode, i.e. do nothing here
+				logInfo("TANGO mock mode is "+tangoMockMode);
 			} else if (actorModeParameter.getExpression().equals(ACTOR_MODE.get(1))) {
 				// Set the mock mode according to tangoMockModeVariableName
 				if (tangoMockModeScalar==null) {
@@ -148,10 +149,10 @@ public class TangoMockModeTransformer extends AbstractDataMessageTransformer {
 				} else {
 					if (tangoMockModeScalar.equals("true")) {
 						tangoMockModeNew = true;
-						logger.info("Actor \""+getName()+"\": TANGO mock mode set to be true according to "+tangoMockModeVariableName);
+						logInfo("TANGO mock mode set to be true according to "+tangoMockModeVariableName);
 					} else if (tangoMockModeScalar.equals("false")) {	
 						tangoMockModeNew = false;
-						logger.info("Actor \""+getName()+"\": TANGO mock mode set to be false according to "+tangoMockModeVariableName);
+						logInfo("TANGO mock mode set to be false according to "+tangoMockModeVariableName);
 					} else {
 						// Raise exception as the content of tangoMockModeVariableName is neither true nor false
 						throw createDataMessageException("Cannot set tango mock mode because "+tangoMockModeVariableName+" is set to "+tangoMockModeScalar+", it should be set to either true or false!", null);
@@ -160,15 +161,15 @@ public class TangoMockModeTransformer extends AbstractDataMessageTransformer {
 			} else if (actorModeParameter.getExpression().equals(ACTOR_MODE.get(2))) {
 				// Force mock mode to true
 				tangoMockModeNew = true;
-				logger.info("Actor \""+getName()+"\": TANGO mock mode forced to be true");
+				logInfo("TANGO mock mode forced to be true");
 			} else if (actorModeParameter.getExpression().equals(ACTOR_MODE.get(3))) {
 				// Force mock mode to false
 				tangoMockModeNew = false;
-				logger.info("Actor \""+getName()+"\": TANGO mock mode forced to be false");
+				logInfo("TANGO mock mode forced to be false");
 			}			
 			// Should the mock mode be changed?
 			if (tangoMockMode != tangoMockModeNew) {
-				logger.info("Actor \""+getName()+"\": TANGO mock mode changed to be "+tangoMockModeNew);
+				logInfo("TANGO mock mode changed to be "+tangoMockModeNew);
 				TangoConnectionFactory.setMockMode(tangoMockModeNew);
 			}
 			// Set the outgoing variable tangoMockModeVariableName
