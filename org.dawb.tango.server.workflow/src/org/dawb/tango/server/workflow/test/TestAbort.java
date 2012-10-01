@@ -25,7 +25,7 @@ import fr.esrf.TangoApi.*;
 public class TestAbort
 {
 	private static final Logger logger = LoggerFactory.getLogger(WorkflowExecutor.class);
-	public String[] availableWorkflows = null;
+	public String availableWorkflows = null;
 	public static DeviceProxy dev = null;
 	
 	public void testSuite() throws DevFailed, InterruptedException {
@@ -39,10 +39,10 @@ public class TestAbort
 	}
 	
 	private void startLongAction() throws DevFailed {
-		String[] arg0 = {"ModelPath","common/tests/test_abort.moml"};
+		String[] arg0 = {"modelpath","common/tests/test_abort.moml"};
 		DeviceData argin = new DeviceData();
 		argin.insert(arg0);
-    	logger.debug("Starting test_long_action.moml workflow");
+    	logger.debug("Starting test_abort.moml workflow");
         DeviceData argout = dev.command_inout("Start", argin);
     	logger.debug("Workflow started: "+argout);
         waitForState(DevState.ON, 100000);
@@ -122,10 +122,9 @@ public class TestAbort
 
 	public void getAvailableWorflows() throws DevFailed {
 		DeviceData argout = dev.command_inout("GetAvailableWorkflows");
-		this.availableWorkflows = argout.extractStringArray();
+		this.availableWorkflows = argout.extractString();
 		logger.info("Available workflows:");
-		for (String workflowName : this.availableWorkflows)
-			logger.info(workflowName);
+		logger.info(this.availableWorkflows);
 	}
 	
 	public static void main (String args[])
