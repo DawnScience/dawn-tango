@@ -349,7 +349,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public void start(String[] argin) throws DevFailed
 	{
-		get_logger().info("Entering start()");
+		get_logger().debug("Entering start()");
 		
 		workflowLog = "";
 
@@ -370,7 +370,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		get_logger().info("Starting the workflow!");
 		this.startWorkflowThread(this);
 
-		get_logger().info("Exiting start()");
+		get_logger().debug("Exiting start()");
 	}
 
 
@@ -383,7 +383,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public void abort() throws DevFailed
 	{
-		get_logger().info("Entering abort()");
+		get_logger().debug("Entering abort()");
 
 		// ---Add your Own code to control device here ---
 
@@ -405,7 +405,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 
 		set_state(DevState.ON);
 
-		get_logger().info("Exiting abort()");
+		get_logger().debug("Exiting abort()");
 	}
 
 
@@ -436,12 +436,12 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public void resume() throws DevFailed
 	{
-		get_logger().info("Entering resume()");
+		get_logger().debug("Entering resume()");
 
 		// ---Add your Own code to control device here ---
 		set_state(DevState.RUNNING);
 
-		get_logger().info("Exiting resume()");
+		get_logger().debug("Exiting resume()");
 	}
 
 
@@ -456,7 +456,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public void set_review_data(String argin) throws DevFailed
 	{
-		get_logger().info("Entering set_review_data()");
+		get_logger().debug("Entering set_review_data()");
 
 		// ---Add your Own code to control device here ---
 		this.reviewData = argin;
@@ -464,7 +464,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		this.configurationXML = null;
 		this.isDialog = false;
 		this.scalarValues = null;
-		get_logger().info("Exiting set_review_data()");
+		get_logger().debug("Exiting set_review_data()");
 	}
 
 
@@ -479,19 +479,19 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public String get_review_data() throws DevFailed
 	{
-		get_logger().info("Entering get_review_data()");
+		get_logger().debug("Entering get_review_data()");
 
 		// ---Add your Own code to control device here ---
 		String argout = this.configurationXML;
-		get_logger().info("argout = "+ argout);
+		get_logger().debug("argout = "+ argout);
 
-		get_logger().info("Exiting get_review_data()");
+		get_logger().debug("Exiting get_review_data()");
 		return argout;
 	}
 
 	public void setStatusToOpen(String parName, boolean isDialog, String configurationXML, Map<String, String> scalarValues) throws DevFailed
 	{
-		get_logger().info("Setting status to OPEN");
+		get_logger().debug("Setting status to OPEN");
 		this.parName = parName;
 		this.isDialog = isDialog;
 		this.configurationXML = configurationXML;
@@ -499,14 +499,14 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		this.reviewData = null;
 		this.outScalarValues = null;
 		set_state(DevState.OPEN);
-		get_logger().info("Status set to OPEN");
+		get_logger().debug("Status set to OPEN");
 	}
 
 	public void setStatusToRunning() throws DevFailed
 	{
-		get_logger().info("Setting status to RUNNING");
+		get_logger().debug("Setting status to RUNNING");
 		set_state(DevState.RUNNING);
-		get_logger().info("Status set to RUNNING");
+		get_logger().debug("Status set to RUNNING");
 	}
 
 	public synchronized boolean hasReviewData() {
@@ -525,7 +525,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public String[] get_scalar_values_map() throws DevFailed
 	{
-		get_logger().info("Entering get_scalar_values_map()");
+		get_logger().debug("Entering get_scalar_values_map()");
 
 		String[]	argout = new String[0];
 		
@@ -547,7 +547,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 				current_index += 2;
 			}
 	
-			get_logger().info("Exiting get_scalar_values_map()");
+			get_logger().debug("Exiting get_scalar_values_map()");
 		}
 		return argout;
 	}
@@ -564,13 +564,13 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public void set_scalar_values_map(String[] argin) throws DevFailed
 	{
-		get_logger().info("Entering set_scalar_values_map()");
+		get_logger().debug("Entering set_scalar_values_map()");
 
 		int noValues = argin.length / 2;
 	
 		set_state(DevState.RUNNING);
 		
-		get_logger().info("Entering set_scalar_values_map()");
+		get_logger().debug("Entering set_scalar_values_map()");
 		
 		// ---Add your Own code to control device here ---
 		if(argin.length % 2 != 0) {
@@ -593,7 +593,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		
 		this.startScalarValues = null;
 
-		get_logger().info("Exiting set_scalar_values_map()");
+		get_logger().debug("Exiting set_scalar_values_map()");
 	}
 
 
@@ -608,7 +608,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	{
 		String	argout = new String();
 
-		get_logger().info("Entering get_available_workflows()");
+		get_logger().debug("Entering get_available_workflows()");
 
 		if (this.availableModelPaths == null) {
 			argout = "<workflows></workflows>";
@@ -617,7 +617,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 				argout += xmlLine + "\n";
 		}
 		get_logger().info("Available workflows: "+ argout);
-		get_logger().info("Exiting get_available_workflows()");
+		get_logger().debug("Exiting get_available_workflows()");
 		return argout;
 	}
 
@@ -631,11 +631,11 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public boolean is_dialog() throws DevFailed
 	{
-		get_logger().info("Entering is_dialog()");
+		get_logger().debug("Entering is_dialog()");
 
-		get_logger().info("IsDialog: "+ this.isDialog);
+		get_logger().debug("IsDialog: "+ this.isDialog);
 
-		get_logger().info("Exiting is_dialog()");
+		get_logger().debug("Exiting is_dialog()");
 		return this.isDialog;
 	}
 
@@ -650,12 +650,12 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 //=========================================================
 	public void set_tango_spec_mock_mode(boolean argin) throws DevFailed
 	{
-		get_logger().info("Entering set_tango_spec_mock_mode()");
+		get_logger().debug("Entering set_tango_spec_mock_mode()");
 
 		get_logger().info("Setting TANGO Spec Mock Mode to: "+argin);
 		this.tangoSpecMockMode = argin;
 		// Store the mock mode in the workspace
-		get_logger().info("Exiting set_tango_spec_mock_mode()");
+		get_logger().debug("Exiting set_tango_spec_mock_mode()");
 	}
 
 
@@ -671,11 +671,11 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	{
 		boolean	argout = tangoSpecMockMode;
 
-		get_logger().info("Entering is_tango_spec_mock_mode()");
+		get_logger().debug("Entering is_tango_spec_mock_mode()");
 
 		get_logger().info("TANGO Spec Mock Mode is: "+argout);
 
-		get_logger().info("Exiting is_tango_spec_mock_mode()");
+		get_logger().debug("Exiting is_tango_spec_mock_mode()");
 		return argout;
 	}
 
@@ -690,11 +690,11 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	{
 		String	argout = new String();
 
-		get_logger().info("Entering get_workflow_log()");
+		get_logger().debug("Entering get_workflow_log()");
 		
 		argout = read_log_file();
 		
-		get_logger().info("Exiting get_workflow_log()");
+		get_logger().debug("Exiting get_workflow_log()");
 		return argout;
 	}
 
@@ -731,7 +731,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		File logFile = new File(System.getProperty("user.home")+"/.dawb/workflow_executor.log");
 		if (logFile.exists()) {
 			try {
-				get_logger().info("Log file "+logFile.getAbsolutePath()+" exists!");
+				get_logger().debug("Log file "+logFile.getAbsolutePath()+" exists!");
 				FileReader input;
 				input = new FileReader(logFile);
 				BufferedReader bufRead = new BufferedReader(input);
@@ -920,8 +920,8 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 
 		@Override
 		public Map<String, String> createUserInput(final UserInputBean bean) throws Exception {
-			logger.info("Create User Input Requested");
-			logger.info("Actor "+bean.getPartName());
+			logger.debug("Create User Input Requested");
+			logger.debug("Actor "+bean.getPartName());
 			final Map<String,String> ret = new HashMap<String,String>(0);
 			try {
 				// TODO bean also has isSilent to know if user configured actor
@@ -955,8 +955,8 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 				                        final boolean isSelected, 
 				                        final int colorCode) throws Exception {
 			
-			logger.info("Select Actor Requested");
-			logger.info("Actor "+actorName+"; isSelected "+isSelected);
+			logger.debug("Select Actor Requested");
+			logger.debug("Actor "+actorName+"; isSelected "+isSelected);
 			if (isSelected)
 				this.workflowExecutorInstance.runningActorName = actorName;
 			return true;
@@ -976,8 +976,8 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 
 		@Override
 		public void notifyMockCommand(String motorName, String message, String cmd) {
-			logger.info("Mock Notify Requested");
-			logger.info("Motor "+motorName+"; message "+message);
+			logger.debug("Mock Notify Requested");
+			logger.debug("Motor "+motorName+"; message "+message);
 		}
 
 		@Override
@@ -998,7 +998,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	 */
 	private void startWorkflowThread(final WorkflowExecutor instance) {
 		IWorkflowService serviceReference = null;
-		logger.info("Before creating thread");
+		logger.debug("Before creating thread");
 		final Thread workflowThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -1032,7 +1032,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	
 			}
 		});
-		logger.info("After creating thread");
+		logger.debug("After creating thread");
 		
 		// Always name your threads, this makes debugging easier
 		workflowThread.setName("Workflow Thread");
