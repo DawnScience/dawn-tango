@@ -22,52 +22,42 @@ import fr.esrf.Tango.*;
 import fr.esrf.TangoDs.*;
 import fr.esrf.TangoApi.*;
    
-public class TestRunWorkflow
+public class TestDialog
 {
 	private static final Logger logger = LoggerFactory.getLogger(WorkflowExecutor.class);
 	public String[] availableWorkflows = null;
 	public static DeviceProxy dev = null;
 	
-	public void testSuite() throws DevFailed {
+	public void testSuite() throws DevFailed, InterruptedException {
 		checkOnState();
 		getAvailableWorflows();
-		testPythonActor();
-		testEDNAActor();
+		startTestDialog();
 	}
 	
-	private void testEDNAActor() throws DevFailed {
-		String[] arg0 = {"ModelPath","common/tests/test_characterisation.moml"};
+	private void startTestDialog() throws DevFailed {
+		String[] arg0 = {"ModelPath","common/tests/test_dialogs.moml"};
 		DeviceData argin = new DeviceData();
 		argin.insert(arg0);
-    	logger.debug("Starting test_characterisation.moml workflow");
+    	logger.debug("Starting test_long_action.moml workflow");
         DeviceData argout = dev.command_inout("Start", argin);
-    	logger.debug("Workflow started");
+    	logger.debug("Workflow started: "+argout);
+        waitForState(DevState.OPEN, 100000);
+		argin = new DeviceData();
+		argin.insert(new String[]{"x","10"});
+		argout = dev.command_inout("SetScalarValuesMap", argin);
+        waitForState(DevState.OPEN, 100000);
+		argin = new DeviceData();
+		argin.insert(new String[]{"x","10"});
+		argout = dev.command_inout("SetScalarValuesMap", argin);
         waitForState(DevState.OPEN, 100000);
 		argin = new DeviceData();
 		argin.insert(new String[]{"x","10"});
 		argout = dev.command_inout("SetScalarValuesMap", argin);
         waitForState(DevState.ON, 100000);
+        
 	}
 
 	
-	private void testPythonActor() throws DevFailed {
-		String[] arg0 = {"ModelPath","common/tests/test_python_actor.moml"};
-		DeviceData argin = new DeviceData();
-		argin.insert(arg0);
-    	logger.debug("Starting test_python_actor workflow");
-        DeviceData argout = dev.command_inout("Start", argin);
-    	logger.debug("Workflow started");
-        String[] scalarValues = makeDataExchange(new String[]{"x","10"}, 100000);
-        for (String scalarValue: scalarValues) {
-        	logger.info(scalarValue);
-        }
-        scalarValues = makeDataExchange(new String[]{"y","1"}, 100000);
-        for (String scalarValue: scalarValues) {
-        	logger.info(scalarValue);
-        }
-        waitForState(DevState.ON, 100000);
-	}
-
 	private String[] makeDataExchange(String[] inputScalarValues, int timeOut) throws DevFailed {
 		final ExchangeData exchangeData = new ExchangeData();
 		exchangeData.setInScalarValues(inputScalarValues);
@@ -149,7 +139,7 @@ public class TestRunWorkflow
 	
 	public static void main (String args[])
 	{
-		final TestRunWorkflow testRunWorkflow = new TestRunWorkflow();
+		final TestDialog testAbort = new TestDialog();
 		// Check that we have an argument
 		if (args.length < 1) {
 			logger.info("Usage: TestRunWorkflow device (e.g. id14he2/workflow/1)");
@@ -160,11 +150,27 @@ public class TestRunWorkflow
 	    	// Connect to the device. The first argument must be the device name
 	        dev = new DeviceProxy(args[0]);
 	        // Run the server test suite
-	        testRunWorkflow.testSuite();
-		} catch (DevFailed e) {
+	        testAbort.testSuite();
+		} catch (Exception e) {
 			Except.print_exception(e);
 			System.exit(1);
 		}
 	}
 }
 
+//final class ExchangeData {
+//	private String[] inScalarValues = null;
+//	private String[] outScalarValues = null;
+//	public String[] getInScalarValues() {
+//		return inScalarValues;
+//	}
+//	public void setInScalarValues(String[] inScalarValues) {
+//		this.inScalarValues = inScalarValues;
+//	}
+//	public String[] getOutScalarValues() {
+//		return outScalarValues;
+//	}
+//	public void setOutScalarValues(String[] outScalarValues) {
+//		this.outScalarValues = outScalarValues;
+//	}
+//}
