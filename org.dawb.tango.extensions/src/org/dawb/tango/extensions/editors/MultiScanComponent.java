@@ -151,7 +151,7 @@ public class MultiScanComponent implements ICheckStateListener {
 		 */
 		system.addTraceListener(new ITraceListener.Stub() {
 			@Override
-			public void tracesAltered(TraceEvent evt) {
+			public void tracesUpdated(TraceEvent evt) {
 				updateSelection();
 			}
 		});
