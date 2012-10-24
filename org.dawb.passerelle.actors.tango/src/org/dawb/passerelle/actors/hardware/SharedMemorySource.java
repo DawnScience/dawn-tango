@@ -154,7 +154,7 @@ public class SharedMemorySource extends AbstractDataMessageSource {
 			if (!isData) return null;
 			
 			final PlotType plotType = DATA_CHOICES[0].equals(dataType.getExpression())
-			                        ? PlotType.PT1D : PlotType.IMAGE;
+			                        ? PlotType.XY : PlotType.IMAGE;
 			
 			final int cSize = ((IntToken)chunkSize.getToken()).intValue();
 			
@@ -291,7 +291,7 @@ public class SharedMemorySource extends AbstractDataMessageSource {
 		try {
 		    final List<IVariable>    ret  = super.getOutputVariables();
 			final PlotType plotType = DATA_CHOICES[0].equals(dataType.getExpression())
-                                    ? PlotType.PT1D : PlotType.IMAGE;
+                                    ? PlotType.XY : PlotType.IMAGE;
 
 			if (plotType==PlotType.IMAGE) {
 				ret.add(new Variable(outputName.getExpression(), VARIABLE_TYPE.ARRAY, null, AbstractDataset.class));

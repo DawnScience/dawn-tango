@@ -151,7 +151,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 		// is usually short.
 		final String plotName = this.getEditorInput().getName();
 		
-        plottingSystem.createPlotPart(plot, plotName, wrapper, PlotType.PT1D, this);     
+        plottingSystem.createPlotPart(plot, plotName, wrapper, PlotType.XY, this);     
 		
 		// Finally
 		if (toolMan!=null)   toolMan.update(true);

@@ -103,7 +103,7 @@ public class SharedMemoryActions {
 				Activator.getDefault().getPreferenceStore().setValue(SharedConstants.IMAGE_MODE, false);
 				final IEditorPart part = EclipseUtils.getActivePage().getActiveEditor();
 				if (part instanceof SharedMemoryEditor) {
-					((SharedMemoryEditor)part).setPlotType(PlotType.PT1D);
+					((SharedMemoryEditor)part).setPlotType(PlotType.XY);
 				}
 			}
 		};

@@ -104,7 +104,7 @@ public class SharedMemoryEditor extends EditorPart {
 		
 		this.plotType = Activator.getDefault().getPreferenceStore().getBoolean(SharedConstants.IMAGE_MODE)
 		              ? PlotType.IMAGE
-		              : PlotType.PT1D;
+		              : PlotType.XY;
 		this.isHistoryMode = Activator.getDefault().getPreferenceStore().getBoolean(SharedConstants.HISTORY_MODE);
 		try {
 	        this.plottingSystem = PlottingFactory.createPlottingSystem();
@@ -321,7 +321,7 @@ public class SharedMemoryEditor extends EditorPart {
 	
 	protected void addPlot(List<AbstractDataset> sets) {
 		
-		if (isHistoryMode && plotType==PlotType.PT1D) {
+		if (isHistoryMode && plotType==PlotType.XY) {
 			
 			int index = Activator.getDefault().getPreferenceStore().getInt(SharedConstants.CHUNK_INDEX);
 			if (index>(sets.size()-1) || index<0) index = sets.size()-1;
