@@ -109,7 +109,6 @@ public class SharedMemoryEditor extends EditorPart {
 		try {
 	        this.plottingSystem = PlottingFactory.createPlottingSystem();
 	        plottingSystem.setColorOption(ColorOption.NONE);
-	        plottingSystem.setDatasetChoosingRequired(false);
 		} catch (Exception ne) {
 			logger.error("Cannot locate any plotting systems!", ne);
 		}
