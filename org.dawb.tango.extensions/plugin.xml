@@ -133,14 +133,20 @@
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
+       <page
+            category="org.dawnsci.preferences.root"
+            class="org.eclipse.ui.internal.dialogs.EmptyPreferencePage"
+            id="org.dawnsci.preferences.tango"
+            name="Tango">
+      </page>
       <page
-            category="org.edna.workbench.preferences.root"
+            category="org.dawnsci.preferences.tango"
             class="org.dawb.tango.extensions.editors.preferences.SharedPreferences"
             id="org.dawb.tango.extensions.shared.preferences"
             name="Shared Memory">
       </page>
       <page
-            category="org.edna.workbench.preferences.root"
+            category="org.dawnsci.preferences.tango"
             class="org.dawb.tango.extensions.editors.preferences.CalibrationPreferences"
             id="org.dawb.tango.extensions.calibration.preferences"
             name="Calibration">
