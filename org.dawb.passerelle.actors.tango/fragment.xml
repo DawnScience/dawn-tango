@@ -4,13 +4,6 @@
 
    <extension
          point="com.isencia.passerelle.engine.actorGroups">
-       <actorgroup
-            icon="icons/HardwareGroup.png"
-            id="org.dawb.passerelle.actors.hardware"
-            name="Hardware"
-            open="false"
-            priority="10">
-      </actorgroup>
       <actorgroup
             icon="icons/tango.png"
             id="org.dawb.passerelle.actors.hardware.tango"
