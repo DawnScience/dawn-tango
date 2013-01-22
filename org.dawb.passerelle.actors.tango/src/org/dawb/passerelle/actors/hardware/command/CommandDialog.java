@@ -54,7 +54,8 @@ public class CommandDialog extends BeanDialog {
 		beans.setColumnWidths(new int[]{120, 300});
 		beans.setListHeight(150);
 		
-		GridUtils.setVisibleAndLayout(beans, true);
+		GridUtils.setVisible(beans, true);
+		beans.getParent().layout(new Control[]{beans});
 		return main;
 	}
 

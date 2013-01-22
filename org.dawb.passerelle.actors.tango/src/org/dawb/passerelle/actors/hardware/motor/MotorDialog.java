@@ -73,7 +73,9 @@ public class MotorDialog extends BeanDialog {
 			}
 		});
 		
-		GridUtils.setVisibleAndLayout(expressions, true);
+		GridUtils.setVisible(expressions, true);
+		expressions.getParent().layout(new Control[]{expressions});
+		
 		return main;
 	}
 
