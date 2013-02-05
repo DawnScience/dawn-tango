@@ -40,9 +40,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import org.dawb.workbench.jmx.ActorSelectedBean;
 import org.dawb.workbench.jmx.IRemoteServiceProvider;
 import org.dawb.workbench.jmx.IRemoteWorkbench;
+import org.dawb.workbench.jmx.UserDebugBean;
 import org.dawb.workbench.jmx.UserInputBean;
+import org.dawb.workbench.jmx.UserPlotBean;
 import org.dawb.workbench.jmx.service.IWorkflowService;
 import org.dawb.workbench.jmx.service.WorkflowFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -933,7 +936,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 				this.workflowExecutorInstance.setStatusToOpen(bean.getPartName(),
 															bean.isDialog(), 
 															bean.getConfigurationXML(),
-															bean.getScalarValues());
+															bean.getScalar());
 				while (! this.workflowExecutorInstance.hasReviewData() && this.workflowExecutorInstance.get_state() == DevState.OPEN) {
 					Thread.sleep(500);// User is pressing ok...
 				}
@@ -950,15 +953,12 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		}
 
 		@Override
-		public boolean setActorSelected(final String resourcePath, 
-				                        final String actorName,
-				                        final boolean isSelected, 
-				                        final int colorCode) throws Exception {
+		public boolean setActorSelected(final ActorSelectedBean bean) throws Exception {
 			
 			logger.debug("Select Actor Requested");
-			logger.debug("Actor "+actorName+"; isSelected "+isSelected);
-			if (isSelected)
-				this.workflowExecutorInstance.runningActorName = actorName;
+			logger.debug("Actor "+bean.getActorName()+"; isSelected "+bean.isSelected());
+			if (bean.isSelected())
+				this.workflowExecutorInstance.runningActorName = bean.getActorName();
 			return true;
 		}
 
@@ -988,6 +988,16 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		@Override
 		public void executionTerminated(int returnCode) {
 			// No need to implement for now
+		}
+
+		@Override
+		public UserPlotBean createPlotInput(UserPlotBean bean) throws Exception {
+			throw new Exception("Plot input method is not supported on "+getClass().getName());
+		}
+
+		@Override
+		public UserDebugBean debug(UserDebugBean bean) throws Exception {
+			throw new Exception("Debug method is not supported on "+getClass().getName());
 		}
 
 	}
