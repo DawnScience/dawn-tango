@@ -114,6 +114,10 @@ public class WorkflowExecutor extends DeviceImpl implements TangoConst
 	 */
 	boolean	isWorking;
 	/**
+	 *	Absolute path to the abort script
+	 */
+	String	abortScriptPath;
+	/**
 	 *	Absolute path to the workspace
 	 */
 	String	workspacePath;
@@ -229,7 +233,8 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 				"WorkspacePath",
 				"ModelPath",
 				"InstallationPath",
-				"AvailableModelPaths"
+				"AvailableModelPaths",
+				"AbortScriptPath"
 			};
 
 		//	Call database and extract values
@@ -280,6 +285,15 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 			//	Try to get value from class property
 			DbDatum	cl_prop = ds_class.get_class_property(dev_prop[i].name);
 			if (cl_prop.is_empty()==false)	availableModelPaths = cl_prop.extractStringArray();
+		}
+
+		//	Extract AbortScriptPath value
+		if (dev_prop[++i].is_empty()==false)		abortScriptPath = dev_prop[i].extractString();
+		else
+		{
+			//	Try to get value from class property
+			DbDatum	cl_prop = ds_class.get_class_property(dev_prop[i].name);
+			if (cl_prop.is_empty()==false)	abortScriptPath = cl_prop.extractString();
 		}
 
 		//	End of Automatic code generation
@@ -404,6 +418,18 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 			logger.info("Workflow cleared.");
 		} catch(Exception ex) {
 			logger.info("Exception caught when trying to stop the workflow:"+ex);
+		}
+		
+		// If an abort script is configured run it
+		if (abortScriptPath != null) {
+			String workflowModelPath = workspacePath +"/"+modelPath;
+			logger.info("Running the abort script: "+abortScriptPath+" for the model path: "+workflowModelPath);
+			try {
+				Thread.sleep(1000);
+				Runtime.getRuntime().exec(abortScriptPath + " " + workflowModelPath);
+			} catch (Exception ex) {
+				logger.info("Exception caught when trying to run the abort script: "+ex);
+			}
 		}
 
 		set_state(DevState.ON);
