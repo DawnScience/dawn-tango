@@ -19,12 +19,7 @@ Require-Bundle: org.dawb.workbench.jmx;bundle-version="0.8.2",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- TangORB-7.4.3.jar,
- ATKCore.jar,
- atkpanel.jar,
- ATKWidget.jar,
- Jive.jar,
- Taco.jar
+ TangORB-7.4.3.jar
 Export-Package: fr.esrf.Tango,
  fr.esrf.Tango.factory,
  fr.esrf.TangoApi,
@@ -33,7 +28,6 @@ Export-Package: fr.esrf.Tango,
  fr.esrf.TangoApi.factory,
  fr.esrf.TangoApi.helpers,
  fr.esrf.TangoDs,
- fr.esrf.tangoatk.core,
  org.apache.avalon.framework,
  org.apache.avalon.framework.activity,
  org.apache.avalon.framework.component,
