@@ -11,7 +11,6 @@ package org.dawb.passerelle.actors.hardware;
 
 import java.util.List;
 
-import org.dawb.common.ui.plot.PlotType;
 import org.dawb.common.ui.preferences.CommonUIPreferenceConstants;
 import org.dawb.passerelle.common.actors.AbstractDataMessageSource;
 import org.dawb.passerelle.common.message.DataMessageComponent;
@@ -24,6 +23,7 @@ import org.dawb.tango.extensions.editors.SharedMemoryUtils;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
+import org.dawnsci.plotting.api.PlotType;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;

@@ -20,7 +20,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import org.dawb.common.ui.plot.AbstractPlottingSystem;
 import org.dawb.common.ui.plot.AbstractPlottingSystem.ColorOption;
-import org.dawb.common.ui.plot.PlotType;
 import org.dawb.common.ui.plot.PlottingFactory;
 import org.dawb.common.ui.util.EclipseUtils;
 import org.dawb.common.ui.util.GridUtils;
@@ -32,6 +31,7 @@ import org.dawb.tango.extensions.editors.actions.SharedMemoryActions;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
+import org.dawnsci.plotting.api.PlotType;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

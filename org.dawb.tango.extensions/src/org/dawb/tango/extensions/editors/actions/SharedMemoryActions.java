@@ -10,13 +10,13 @@
 package org.dawb.tango.extensions.editors.actions;
 
 import org.dawb.common.ui.menu.CheckableActionGroup;
-import org.dawb.common.ui.plot.PlotType;
 import org.dawb.common.ui.preferences.TangoPreferencePage;
 import org.dawb.common.ui.util.EclipseUtils;
 import org.dawb.tango.extensions.Activator;
 import org.dawb.tango.extensions.editors.SharedMemoryEditor;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.editors.preferences.SharedPreferences;
+import org.dawnsci.plotting.api.PlotType;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.Separator;

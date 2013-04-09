@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dawb.common.ui.plot.PlotType;
 import org.dawb.common.ui.util.CalibrationUtils;
 import org.dawb.common.util.ExpressionFactory;
 import org.dawb.common.util.IExpressionEvaluator;
@@ -26,6 +25,7 @@ import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.editors.preferences.CalibrationConstants;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.factory.TangoConnection;
+import org.dawnsci.plotting.api.PlotType;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;

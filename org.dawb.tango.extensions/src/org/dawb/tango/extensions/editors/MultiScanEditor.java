@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.dawb.common.ui.plot.AbstractPlottingSystem;
 import org.dawb.common.ui.plot.AbstractPlottingSystem.ColorOption;
-import org.dawb.common.ui.plot.PlotType;
 import org.dawb.common.ui.plot.PlottingFactory;
 import org.dawb.common.ui.util.EclipseUtils;
 import org.dawb.common.ui.util.GridUtils;
@@ -25,6 +24,7 @@ import org.dawb.common.ui.views.monitor.actions.TangoPreferencesAction;
 import org.dawb.common.ui.widgets.ActionBarWrapper;
 import org.dawb.gda.extensions.spec.MultiScanDataParser;
 import org.dawb.tango.extensions.Activator;
+import org.dawnsci.plotting.api.PlotType;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
