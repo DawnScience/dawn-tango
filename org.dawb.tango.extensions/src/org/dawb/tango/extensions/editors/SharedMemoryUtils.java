@@ -13,13 +13,9 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.dawb.common.ui.util.CalibrationUtils;
-import org.dawb.common.util.ExpressionFactory;
-import org.dawb.common.util.IExpressionEvaluator;
 import org.dawb.tango.extensions.Activator;
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.editors.preferences.CalibrationConstants;

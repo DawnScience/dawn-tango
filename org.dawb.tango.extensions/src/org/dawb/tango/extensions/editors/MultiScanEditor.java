@@ -59,6 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.IDataset;
 
 
 /**
@@ -246,7 +247,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 				return;
 			}
 			
-			final List<AbstractDataset> selections = new ArrayList<AbstractDataset>(sel);
+			final List<IDataset> selections = new ArrayList<IDataset>(sel);
 
 			IProgressService service =  getEditorSite()!=null 
 			                         ? (IProgressService)getSite().getService(IProgressService.class)
@@ -259,7 +260,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 						monitor.beginTask("Updating selected DataSets", 100);
 
 						
-						final AbstractDataset x = selections.remove(0);
+						final IDataset x = selections.remove(0);
 						plottingSystem.clear();
 						plottingSystem.createPlot1D(x, selections, monitor);
 						

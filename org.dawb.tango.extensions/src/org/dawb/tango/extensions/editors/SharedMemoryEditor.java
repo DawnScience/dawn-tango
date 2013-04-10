@@ -63,6 +63,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.IDataset;
 import uk.ac.diamond.scisoft.analysis.dataset.IntegerDataset;
 import fr.esrf.Tango.DevError;
 import fr.esrf.TangoApi.DeviceData;
@@ -357,8 +358,8 @@ public class SharedMemoryEditor extends EditorPart {
 						
 						if (plotType==PlotType.IMAGE) {
 							//setToolbarsVisible(true);
-							final AbstractDataset set = sets.get(0);
-							final List<AbstractDataset> axes = new ArrayList<AbstractDataset>(2);
+							final IDataset set = sets.get(0);
+							final List<IDataset> axes = new ArrayList<IDataset>(2);
 							if (set==null || set.getShape()==null) {
 								logger.error("Cannot read file "+getEditorInput().getName());
 								return;
@@ -369,9 +370,11 @@ public class SharedMemoryEditor extends EditorPart {
 							
 						} else {
 							//setToolbarsVisible(false);
-							final AbstractDataset axis = (AbstractDataset)SharedMemoryUtils.getXAxis(sets.get(0));
+							final IDataset axis = SharedMemoryUtils.getXAxis(sets.get(0));
 							plottingSystem.clear();
-							plottingSystem.createPlot1D(axis, sets, null);
+							final List<IDataset> ys = new ArrayList<IDataset>();
+							for (AbstractDataset iDataset : sets) ys.add(iDataset);
+							plottingSystem.createPlot1D(axis, ys, null);
 						}
 					}
 					
