@@ -625,6 +625,19 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		get_logger().debug("Exiting set_scalar_values_map()");
 	}
 
+	public Map<? extends String, ? extends String> addStartValues(Map<String, String> scalar) {
+		int noValues = scalar.size();
+		if (this.startScalarValues != null) {
+			noValues = noValues + this.startScalarValues.size();
+		}
+		outScalarValues = new HashMap<String, String>(noValues);
+		this.outScalarValues.putAll(scalar);
+		if (this.startScalarValues != null) {
+			this.outScalarValues.putAll(this.startScalarValues);
+		}
+		
+		return outScalarValues;
+	}
 
 //=========================================================
 /**
@@ -911,8 +924,11 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		}
 
 		@Override
-		public boolean showMessage(String title, String message, int type) {
+		public boolean showMessage(String title, String messageUnescaped, int type) {
 			logger.info("Show Message Requested");
+			String message = messageUnescaped.replace("<", "&lt;").replace(">", "&gt;");
+			// This is the correct way but I couldn't get the server to import org.apache.commons.lang...
+			// String message = StringEscapeUtils.escapeHtml(messageUnescaped);
 			logger.info("Title "+title+"; message "+message);
 			String typeString = null;
 			switch (type) {
@@ -953,21 +969,22 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 			logger.debug("Actor "+bean.getPartName());
 			final Map<String,String> ret = new HashMap<String,String>(0);
 			try {
-				// TODO bean also has isSilent to know if user configured actor
-				// to be silent (i.e. no UI) when it runs. On the Java client
-				// this simply means there is no dialog shown and the default
-				// values are used.
-				// Sleep 0.5s in order to allow polling with a frequency > 1 ms...
-				Thread.sleep(500);
-				this.workflowExecutorInstance.setStatusToOpen(bean.getPartName(),
-															bean.isDialog(), 
-															bean.getConfigurationXML(),
-															bean.getScalar());
-				while (! this.workflowExecutorInstance.hasReviewData() && this.workflowExecutorInstance.get_state() == DevState.OPEN) {
-					Thread.sleep(500);// User is pressing ok...
-				}
-				if (this.workflowExecutorInstance.get_state() == DevState.RUNNING) {
-					ret.putAll(this.workflowExecutorInstance.getScalarValues());
+				// If 'isSilent' just copy over start values (first time).
+				if (bean.isSilent()) {
+					ret.putAll(this.workflowExecutorInstance.addStartValues(bean.getScalar()));
+				} else {
+					// Sleep 0.5s in order to allow polling with a frequency > 1 ms...
+					Thread.sleep(500);
+					this.workflowExecutorInstance.setStatusToOpen(bean.getPartName(),
+																bean.isDialog(), 
+																bean.getConfigurationXML(),
+																bean.getScalar());
+					while (! this.workflowExecutorInstance.hasReviewData() && this.workflowExecutorInstance.get_state() == DevState.OPEN) {
+						Thread.sleep(500);// User is pressing ok...
+					}
+					if (this.workflowExecutorInstance.get_state() == DevState.RUNNING) {
+						ret.putAll(this.workflowExecutorInstance.getScalarValues());
+					}
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
