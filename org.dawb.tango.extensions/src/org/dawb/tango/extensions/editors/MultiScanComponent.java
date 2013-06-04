@@ -122,7 +122,8 @@ public class MultiScanComponent implements ICheckStateListener {
 				if (back==null) back = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 				gc.setBackground(back);
 
-				final Color fore = ((ColumnLabelProvider)dataViewer.getLabelProvider()).getForeground(set);
+				Color fore = ((ColumnLabelProvider)dataViewer.getLabelProvider()).getForeground(set);
+				if (fore==null) fore = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 				if (fore!=null) {
 					final String text = ((ColumnLabelProvider)dataViewer.getLabelProvider()).getText(set);
 
