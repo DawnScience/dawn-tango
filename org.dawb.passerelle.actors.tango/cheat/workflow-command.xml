@@ -23,7 +23,7 @@
       </description>
       <command
             required="false"
-            serialization="org.eclipse.ui.navigate.openResource(filePath=workflows/examples/command_example.moml)"/>
+            serialization="org.eclipse.ui.navigate.openResource(filePath=workflows/examples/spec_scan_example.moml)"/>
    </item>
    
    <item title="Run Workflow">
