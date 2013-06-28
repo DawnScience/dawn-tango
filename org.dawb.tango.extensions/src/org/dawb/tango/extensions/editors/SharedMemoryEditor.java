@@ -30,6 +30,7 @@ import org.dawb.tango.extensions.editors.actions.SharedMemoryActions;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
+import org.dawnsci.plotting.api.IPlottingSystem;
 import org.dawnsci.plotting.api.PlotType;
 import org.dawnsci.plotting.api.trace.ColorOption;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -81,7 +82,7 @@ public class SharedMemoryEditor extends EditorPart {
 	private static Logger logger = LoggerFactory.getLogger(SharedMemoryEditor.class);
 	
 	// This view is a composite of two other views.
-	private AbstractPlottingSystem      plottingSystem;	
+	private IPlottingSystem             plottingSystem;	
 	private Composite                   tools;
 	private String                      memoryName;
 	private boolean                     isMonitoring;
@@ -168,7 +169,7 @@ public class SharedMemoryEditor extends EditorPart {
 		point.setEditable(false);
 		GridUtils.setVisible(point, false);
 		point.setBackground(tools.getBackground());
-		plottingSystem.setPointControls(point);
+		((AbstractPlottingSystem)plottingSystem).setPointControls(point);
 
 		ToolBarManager sharedMan = new ToolBarManager(SWT.FLAT|SWT.RIGHT);
 		final ToolBar  sharedBar = sharedMan.createControl(tools);

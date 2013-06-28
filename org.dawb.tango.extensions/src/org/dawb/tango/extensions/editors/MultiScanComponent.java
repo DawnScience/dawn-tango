@@ -23,6 +23,7 @@ import javax.swing.tree.TreeNode;
 import org.dawb.common.ui.plot.AbstractPlottingSystem;
 import org.dawb.common.util.list.IdentityList;
 import org.dawb.gda.extensions.spec.MultiScanDataParser;
+import org.dawnsci.plotting.api.IPlottingSystem;
 import org.dawnsci.plotting.api.trace.ITraceListener;
 import org.dawnsci.plotting.api.trace.TraceEvent;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -63,9 +64,9 @@ public class MultiScanComponent implements ICheckStateListener {
 	// Use table as it might get extended to do more later.
 	protected CheckboxTreeViewer  dataViewer;
 	protected MultiScanDataParser            data;
-	protected AbstractPlottingSystem system;
+	protected IPlottingSystem system;
 	
-	public MultiScanComponent(AbstractPlottingSystem system) {
+	public MultiScanComponent(IPlottingSystem system) {
 		this.system = system;
 	}
 	/**

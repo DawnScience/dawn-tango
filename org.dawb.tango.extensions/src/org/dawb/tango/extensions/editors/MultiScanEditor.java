@@ -23,6 +23,7 @@ import org.dawb.common.ui.views.monitor.actions.TangoPreferencesAction;
 import org.dawb.common.ui.widgets.ActionBarWrapper;
 import org.dawb.gda.extensions.spec.MultiScanDataParser;
 import org.dawb.tango.extensions.Activator;
+import org.dawnsci.plotting.api.IPlottingSystem;
 import org.dawnsci.plotting.api.PlotType;
 import org.dawnsci.plotting.api.trace.ColorOption;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -74,7 +75,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 	private static Logger logger = LoggerFactory.getLogger(MultiScanEditor.class);
 	
 	// This view is a composite of two other views.
-	private AbstractPlottingSystem      plottingSystem;	
+	private IPlottingSystem             plottingSystem;	
     private MultiScanDataParser         data;
 	private boolean                     isDefaultConnectedSpec;
 	private Composite                   plot;
@@ -363,7 +364,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 		return ((MultiScanPage)page).getMultiScanComponent();
 	}
 
-	public AbstractPlottingSystem getPlottingSystem() {
+	public IPlottingSystem getPlottingSystem() {
 		return this.plottingSystem;
 	}
 	

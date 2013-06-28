@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.dawb.common.ui.plot.AbstractPlottingSystem;
+import org.dawnsci.plotting.api.IPlottingSystem;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.slf4j.Logger;
@@ -24,9 +25,9 @@ public class MultiScanLabelProvider extends ColumnLabelProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(MultiScanLabelProvider.class);
 	
-	private AbstractPlottingSystem system;
+	private IPlottingSystem system;
 	
-	MultiScanLabelProvider(final AbstractPlottingSystem editor) {
+	MultiScanLabelProvider(final IPlottingSystem editor) {
 		this.system = editor;
 	}
 	
@@ -64,7 +65,8 @@ public class MultiScanLabelProvider extends ColumnLabelProvider {
 		final TreeNode node  = (TreeNode)element;
 		final Object  object = ((DefaultMutableTreeNode)node).getUserObject();
 	    if (object instanceof AbstractDataset && system!=null) {
-	    	return system.get1DPlotColor((AbstractDataset)object);
+	    	
+	    	return ((AbstractPlottingSystem)system).get1DPlotColor((AbstractDataset)object);
 	    }
 		return null;
 	}
