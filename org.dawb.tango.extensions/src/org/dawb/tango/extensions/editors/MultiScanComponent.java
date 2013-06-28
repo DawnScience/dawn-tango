@@ -20,7 +20,6 @@ import java.util.Set;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.dawb.common.ui.plot.AbstractPlottingSystem;
 import org.dawb.common.util.list.IdentityList;
 import org.dawb.gda.extensions.spec.MultiScanDataParser;
 import org.dawnsci.plotting.api.IPlottingSystem;
