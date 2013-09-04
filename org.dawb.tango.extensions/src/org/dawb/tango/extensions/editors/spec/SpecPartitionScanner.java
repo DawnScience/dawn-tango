@@ -9,7 +9,7 @@
  */ 
 package org.dawb.tango.extensions.editors.spec;
 
-import org.dawb.gda.extensions.spec.SpecSyntax;
+import org.dawnsci.io.spec.SpecSyntax;
 import org.dawb.tango.extensions.TangoUtils;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;

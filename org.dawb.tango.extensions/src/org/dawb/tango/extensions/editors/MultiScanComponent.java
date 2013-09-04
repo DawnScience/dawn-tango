@@ -21,7 +21,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.dawb.common.util.list.IdentityList;
-import org.dawb.gda.extensions.spec.MultiScanDataParser;
+import org.dawnsci.io.spec.MultiScanDataParser;
 import org.dawnsci.plotting.api.IPlottingSystem;
 import org.dawnsci.plotting.api.trace.ITraceListener;
 import org.dawnsci.plotting.api.trace.TraceEvent;

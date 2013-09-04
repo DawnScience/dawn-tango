@@ -10,11 +10,10 @@
 package org.dawb.tango.extensions;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.dawb.common.ui.Activator;
 import org.dawb.common.ui.preferences.CommonUIPreferenceConstants;
-import org.dawb.gda.extensions.spec.SpecSyntax;
+import org.dawnsci.io.spec.SpecSyntax;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;

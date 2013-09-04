@@ -9,7 +9,7 @@
  */ 
 package org.dawb.tango.extensions.console;
 
-import org.dawb.gda.extensions.spec.SpecSyntax;
+import org.dawnsci.io.spec.SpecSyntax;
 import org.dawb.tango.extensions.TangoUtils;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
