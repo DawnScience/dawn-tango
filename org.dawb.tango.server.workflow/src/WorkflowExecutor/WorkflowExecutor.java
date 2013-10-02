@@ -1024,7 +1024,7 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 		}
 
 		@Override
-		public void executionStarted() {
+		public void executionStarted(boolean startDebugger) {
 			// No need to implement for now
 		}
 
