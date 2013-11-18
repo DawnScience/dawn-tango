@@ -10,6 +10,7 @@
 package org.dawb.passerelle.actors.hardware.command;
 
 import org.dawb.common.ui.util.GridUtils;
+import org.dawnsci.common.richbeans.components.wrappers.TextWrapper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,8 +20,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-
-import uk.ac.gda.richbeans.components.wrappers.TextWrapper;
 
 public class CommandComposite extends Composite {
 

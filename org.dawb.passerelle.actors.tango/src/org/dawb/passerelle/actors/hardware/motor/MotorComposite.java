@@ -11,6 +11,12 @@ package org.dawb.passerelle.actors.hardware.motor;
 
 import java.util.Map;
 
+import org.dawb.common.ui.util.GridUtils;
+import org.dawb.passerelle.actors.Activator;
+import org.dawnsci.common.richbeans.components.wrappers.BooleanWrapper;
+import org.dawnsci.common.richbeans.components.wrappers.TextWrapper;
+import org.dawnsci.common.richbeans.event.ValueAdapter;
+import org.dawnsci.common.richbeans.event.ValueEvent;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -22,13 +28,6 @@ import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
-import uk.ac.gda.common.rcp.util.GridUtils;
-import uk.ac.gda.richbeans.components.wrappers.BooleanWrapper;
-import uk.ac.gda.richbeans.components.wrappers.TextWrapper;
-import uk.ac.gda.richbeans.event.ValueAdapter;
-import uk.ac.gda.richbeans.event.ValueEvent;
-
-import com.swtdesigner.ResourceManager;
 
 public class MotorComposite extends Composite {
 
@@ -52,7 +51,7 @@ public class MotorComposite extends Composite {
 		motorLabel.setText("Motor Name");
 		
 		controlDecoration = new ControlDecoration(motorLabel, SWT.LEFT | SWT.TOP);
-		controlDecoration.setImage(ResourceManager.getPluginImage("org.dawb.passerelle.actors", "icons/hardware.gif"));
+		controlDecoration.setImage(Activator.getImageDescriptor("icons/hardware.gif").createImage());
 		controlDecoration.setDescriptionText("The motor path after the beamline part of the path, for instance 'motors/phi'");
 		
 		this.motorName = new TextWrapper(main, SWT.NONE);
