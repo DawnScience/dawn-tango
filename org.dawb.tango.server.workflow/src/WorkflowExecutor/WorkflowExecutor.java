@@ -368,24 +368,30 @@ WorkflowExecutor(DeviceClass cl, String s, String d) throws DevFailed
 	{
 		get_logger().debug("Entering start()");
 		
+		this.modelPath = null;
 		workflowLog = "";
 
-		if (argin.length > 1) {
-			if (argin[0].equals("modelpath")) {
+		
+		for (int i = 0; i < argin.length - 1; i += 2) {
+			if (argin[i].equals("modelpath")) {
 				this.modelPath = argin[1];
+			} else {
+				get_logger().error("No model path in input!!!");
 			}
 		}
-		
-		get_logger().info("ModelPath set to: "+this.modelPath);
-		this.startScalarValues = new HashMap<String, String>(argin.length / 2);
 
-		for (int i = 0; i < argin.length - 1; i += 2) {
-			this.startScalarValues.put(argin[i], argin[i+1]);
-			get_logger().info("Added start key: "+argin[i]+", value: "+argin[i+1]);
+		if (this.modelPath != null) {
+			get_logger().info("ModelPath set to: "+this.modelPath);
+			this.startScalarValues = new HashMap<String, String>(argin.length / 2);
+	
+			for (int j = 0; j < argin.length - 1; j += 2) {
+				this.startScalarValues.put(argin[j], argin[j+1]);
+				get_logger().info("Added start key: "+argin[j]+", value: "+argin[j+1]);
+			}
+	
+			get_logger().info("Starting the workflow!");
+			this.startWorkflowThread(this);
 		}
-
-		get_logger().info("Starting the workflow!");
-		this.startWorkflowThread(this);
 
 		get_logger().debug("Exiting start()");
 	}
