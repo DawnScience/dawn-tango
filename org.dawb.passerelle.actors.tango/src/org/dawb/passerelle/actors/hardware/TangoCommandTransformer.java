@@ -26,9 +26,9 @@ import org.dawb.passerelle.common.message.DataMessageComponent;
 import org.dawb.passerelle.common.message.DataMessageException;
 import org.dawb.passerelle.common.message.IVariable;
 import org.dawb.passerelle.common.message.MessageUtils;
+import org.dawb.passerelle.common.message.SubstitutionParticipant;
 import org.dawb.passerelle.common.parameter.ParameterUtils;
 import org.dawb.passerelle.editors.SubstitutionEditor;
-import org.dawb.passerelle.editors.SubstitutionParticipant;
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionEvent;
@@ -55,7 +55,6 @@ import com.isencia.passerelle.util.ptolemy.ResourceParameter;
 import com.isencia.passerelle.workbench.model.actor.IPartListenerActor;
 import com.isencia.passerelle.workbench.model.actor.IResourceActor;
 import com.isencia.passerelle.workbench.model.actor.ResourceObject;
-import com.isencia.passerelle.workbench.model.utils.ModelUtils;
 
 /**
  * This actor sets or gets a motor value, if set then value should be set
