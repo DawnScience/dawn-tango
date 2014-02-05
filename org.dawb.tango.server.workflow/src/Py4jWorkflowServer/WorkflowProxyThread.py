@@ -81,11 +81,11 @@ class WorkflowProxyThread(threading.Thread):
         strPathToDawbJmx = os.path.join(os.environ["JMX_LOC"], "org.dawb.workbench.jmx")
         listClasspath = []
         listClasspath.append(os.path.join(strPathToDawbJmx, "py4j0.7.jar"))
-        listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.slf4j.api-1.5.6.jar"))
-        listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.ch.qos.logback.classic-0.9.15.jar"))
-        listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.ch.qos.logback.core-0.9.15.jar"))
+        # These jars have been moved to TP, see: http://jira.diamond.ac.uk/browse/DAWNSCI-832
+        #listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.slf4j.api-1.5.6.jar"))
+        #listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.ch.qos.logback.classic-0.9.15.jar"))
+        #listClasspath.append(os.path.join(strPathToDawbJmx, "com.springsource.ch.qos.logback.core-0.9.15.jar"))
         listClasspath.append(os.path.join(strPathToDawbJmx, "bin"))
-        listClasspath.append("/tmp/123456")
         args = []
         strClasspathTotal = ""
         for strClasspath in listClasspath:
