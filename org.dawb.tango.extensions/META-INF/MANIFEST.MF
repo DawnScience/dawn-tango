@@ -107,4 +107,4 @@ Import-Package: org.dawb.common.services,
  org.eclipse.debug.core,
  org.eclipse.ui,
  org.eclipse.ui.ide,
- org.slf4j;version="[1.7.5,1.7.6)"
+ org.slf4j;version="[1.7.6,1.7.7)"
