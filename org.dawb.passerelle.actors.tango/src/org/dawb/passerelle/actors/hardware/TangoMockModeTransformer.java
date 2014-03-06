@@ -18,7 +18,6 @@ import java.util.Map;
 import javax.management.MBeanServerConnection;
 
 import org.dawb.common.util.ExpressionUtils;
-import org.dawb.common.util.SubstituteUtils;
 import org.dawb.passerelle.actors.hardware.motor.MotorBean;
 import org.dawb.passerelle.actors.hardware.motor.MotorContainer;
 import org.dawb.passerelle.actors.hardware.motor.MotorParameter;
@@ -29,6 +28,7 @@ import org.dawb.passerelle.common.message.IVariable;
 import org.dawb.passerelle.common.message.IVariable.VARIABLE_TYPE;
 import org.dawb.passerelle.common.message.MessageUtils;
 import org.dawb.passerelle.common.message.Variable;
+import org.dawb.passerelle.common.utils.SubstituteUtils;
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
@@ -48,6 +48,7 @@ import com.isencia.passerelle.actor.ProcessingException;
 import com.isencia.passerelle.util.ptolemy.StringChoiceParameter;
 
 import fr.esrf.TangoApi.DeviceAttribute;
+
 import org.eclipse.swt.SWT;
 
 /**

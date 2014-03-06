@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dawb.common.util.SubstituteUtils;
 import org.dawb.common.util.io.IFileUtils;
 import org.dawb.passerelle.actors.hardware.command.CommandBean;
 import org.dawb.passerelle.actors.hardware.command.CommandContainer;
@@ -29,6 +28,7 @@ import org.dawb.passerelle.common.message.IVariable;
 import org.dawb.passerelle.common.message.MessageUtils;
 import org.dawb.passerelle.common.message.SubstitutionParticipant;
 import org.dawb.passerelle.common.parameter.ParameterUtils;
+import org.dawb.passerelle.common.utils.SubstituteUtils;
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionEvent;
