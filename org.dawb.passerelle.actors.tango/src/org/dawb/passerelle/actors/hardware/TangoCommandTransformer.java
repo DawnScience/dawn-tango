@@ -21,7 +21,6 @@ import org.dawb.passerelle.actors.hardware.command.CommandBean;
 import org.dawb.passerelle.actors.hardware.command.CommandContainer;
 import org.dawb.passerelle.actors.hardware.command.CommandParameter;
 import org.dawb.passerelle.common.actors.AbstractDataMessageTransformer;
-import org.dawb.passerelle.common.message.DataMessageComponent;
 import org.dawb.passerelle.common.message.DataMessageException;
 import org.dawb.passerelle.common.message.ISubstitutionEditor;
 import org.dawb.passerelle.common.message.IVariable;
@@ -49,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import ptolemy.kernel.CompositeEntity;
 import ptolemy.kernel.util.Settable;
+import uk.ac.diamond.scisoft.analysis.message.DataMessageComponent;
 
 import com.isencia.passerelle.actor.ProcessingException;
 import com.isencia.passerelle.util.ptolemy.ResourceParameter;
