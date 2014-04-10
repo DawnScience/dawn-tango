@@ -8,4 +8,5 @@ Fragment-Host: org.dawb.passerelle.actors;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.dawb.passerelle.actors.hardware
 Require-Bundle: org.eclipse.ui.forms,
- org.dawb.tango.extensions;bundle-version="1.0.0"
+ org.dawb.tango.extensions;bundle-version="1.0.0",
+ org.dawnsci.plotting.api;bundle-version="1.2.0"
