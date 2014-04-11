@@ -12,7 +12,7 @@ package org.dawb.passerelle.actors.hardware.motor;
 import java.util.Map;
 
 import org.dawb.common.ui.util.GridUtils;
-import org.dawb.passerelle.actors.Activator;
+import org.dawb.passerelle.actors.hardware.image.ImageUtils;
 import org.dawnsci.common.richbeans.components.wrappers.BooleanWrapper;
 import org.dawnsci.common.richbeans.components.wrappers.TextWrapper;
 import org.dawnsci.common.richbeans.event.ValueAdapter;
@@ -51,7 +51,7 @@ public class MotorComposite extends Composite {
 		motorLabel.setText("Motor Name");
 		
 		controlDecoration = new ControlDecoration(motorLabel, SWT.LEFT | SWT.TOP);
-		controlDecoration.setImage(Activator.getImageDescriptor("icons/hardware.gif").createImage());
+		controlDecoration.setImage(ImageUtils.getImageDescriptor("icons/hardware.gif").createImage());
 		controlDecoration.setDescriptionText("The motor path after the beamline part of the path, for instance 'motors/phi'");
 		
 		this.motorName = new TextWrapper(main, SWT.NONE);

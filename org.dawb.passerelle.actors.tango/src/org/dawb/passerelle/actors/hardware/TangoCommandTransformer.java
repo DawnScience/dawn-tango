@@ -51,10 +51,10 @@ import ptolemy.kernel.util.Settable;
 import uk.ac.diamond.scisoft.analysis.message.DataMessageComponent;
 
 import com.isencia.passerelle.actor.ProcessingException;
+import com.isencia.passerelle.resources.actor.IResourceActor;
+import com.isencia.passerelle.resources.actor.ResourceObject;
 import com.isencia.passerelle.util.ptolemy.ResourceParameter;
 import com.isencia.passerelle.workbench.model.actor.IPartListenerActor;
-import com.isencia.passerelle.workbench.model.actor.IResourceActor;
-import com.isencia.passerelle.workbench.model.actor.ResourceObject;
 
 /**
  * This actor sets or gets a motor value, if set then value should be set
