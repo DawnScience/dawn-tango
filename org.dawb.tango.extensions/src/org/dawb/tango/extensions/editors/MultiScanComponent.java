@@ -22,9 +22,9 @@ import javax.swing.tree.TreeNode;
 
 import org.dawb.common.util.list.IdentityList;
 import org.dawnsci.io.spec.MultiScanDataParser;
-import org.dawnsci.plotting.api.IPlottingSystem;
-import org.dawnsci.plotting.api.trace.ITraceListener;
-import org.dawnsci.plotting.api.trace.TraceEvent;
+import org.eclipse.dawnsci.plotting.api.IPlottingSystem;
+import org.eclipse.dawnsci.plotting.api.trace.ITraceListener;
+import org.eclipse.dawnsci.plotting.api.trace.TraceEvent;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;

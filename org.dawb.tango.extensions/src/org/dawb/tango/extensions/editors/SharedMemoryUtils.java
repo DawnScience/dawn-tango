@@ -21,7 +21,7 @@ import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.editors.preferences.CalibrationConstants;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.factory.TangoConnection;
-import org.dawnsci.plotting.api.PlotType;
+import org.eclipse.dawnsci.plotting.api.PlotType;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
