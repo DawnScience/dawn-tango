@@ -63,7 +63,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 import uk.ac.diamond.scisoft.analysis.dataset.IDataset;
 import uk.ac.diamond.scisoft.analysis.dataset.IntegerDataset;
 import fr.esrf.Tango.DevError;
@@ -89,19 +89,19 @@ public class SharedMemoryEditor extends EditorPart {
 	private boolean                     isHistoryMode;
 	private TangoConnection             connection;
 	
-	private final BlockingDeque<List<AbstractDataset>> plotQueue;
+	private final BlockingDeque<List<Dataset>> plotQueue;
 	
 	// NOTE At first glance, it might seem inefficient to keep the history here
 	// but it does not make much odds. The graph redraws everything anyway if you
 	// add one, so adding all should not be much slower than adding one at a time.
-	private final List<AbstractDataset> history;
+	private final List<Dataset> history;
 	private Thread                      monitoringThread;
 	private PlotType                    plotType;
 	
 	public SharedMemoryEditor() {
 	
-		this.plotQueue    = new LinkedBlockingDeque<List<AbstractDataset>>(7);
-		this.history      = new ArrayList<AbstractDataset>(31);
+		this.plotQueue    = new LinkedBlockingDeque<List<Dataset>>(7);
+		this.history      = new ArrayList<Dataset>(31);
 		this.isMonitoring = Activator.getDefault().getPreferenceStore().getBoolean(SharedConstants.SHARED_MON);
 		
 		this.plotType = Activator.getDefault().getPreferenceStore().getBoolean(SharedConstants.IMAGE_MODE)
@@ -261,7 +261,7 @@ public class SharedMemoryEditor extends EditorPart {
 	}
 
 	private void createFirstPlot() throws Exception {
-		final List<AbstractDataset> sets = SharedMemoryUtils.getSharedMemoryValue(connection, getMemoryName(), plotType);
+		final List<Dataset> sets = SharedMemoryUtils.getSharedMemoryValue(connection, getMemoryName(), plotType);
 		if (sets==null) return;
 		addPlot(sets);
 	}
@@ -294,7 +294,7 @@ public class SharedMemoryEditor extends EditorPart {
 							final DeviceData ret = connection.executeCommand("IsUpdated", out, false);
 							if (ret.extractLong()==1) {
 								
-								final List<AbstractDataset> sets = SharedMemoryUtils.getSharedMemoryValue(connection, getMemoryName(), plotType);
+								final List<Dataset> sets = SharedMemoryUtils.getSharedMemoryValue(connection, getMemoryName(), plotType);
 								if (sets==null)     continue;
 								if (sets.isEmpty()) continue;
 							
@@ -320,13 +320,13 @@ public class SharedMemoryEditor extends EditorPart {
 		monitoringThread.start();
 	}
 	
-	protected void addPlot(List<AbstractDataset> sets) {
+	protected void addPlot(List<Dataset> sets) {
 		
 		if (isHistoryMode && plotType==PlotType.XY) {
 			
 			int index = Activator.getDefault().getPreferenceStore().getInt(SharedConstants.CHUNK_INDEX);
 			if (index>(sets.size()-1) || index<0) index = sets.size()-1;
-			AbstractDataset h = sets.get(index);
+			Dataset h = sets.get(index);
 			history.add(0, h);
 			
 		} else {
@@ -353,7 +353,7 @@ public class SharedMemoryEditor extends EditorPart {
 				try {
 					while (connection!=null&&plottingSystem!=null && !tools.isDisposed() ) {
 						
-						final List<AbstractDataset> sets = plotQueue.take();
+						final List<Dataset> sets = plotQueue.take();
 						if (sets.isEmpty()) break;
 						
 						
@@ -374,7 +374,7 @@ public class SharedMemoryEditor extends EditorPart {
 							final IDataset axis = SharedMemoryUtils.getXAxis(sets.get(0));
 							plottingSystem.clear();
 							final List<IDataset> ys = new ArrayList<IDataset>();
-							for (AbstractDataset iDataset : sets) ys.add(iDataset);
+							for (Dataset iDataset : sets) ys.add(iDataset);
 							plottingSystem.createPlot1D(axis, ys, null);
 						}
 					}
@@ -393,7 +393,7 @@ public class SharedMemoryEditor extends EditorPart {
 		queueThread.start();
 	}
 	
-	private static AbstractDataset createAxisDataset(int size) {
+	private static Dataset createAxisDataset(int size) {
 		final int[] data = new int[size];
 		for (int i = 0; i < data.length; i++) data[i] = i;
 		IntegerDataset ret = new IntegerDataset(data, size);

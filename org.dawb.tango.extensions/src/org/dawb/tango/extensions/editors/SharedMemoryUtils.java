@@ -24,7 +24,8 @@ import org.dawb.tango.extensions.factory.TangoConnection;
 import org.eclipse.dawnsci.plotting.api.PlotType;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
+import uk.ac.diamond.scisoft.analysis.dataset.DatasetFactory;
 import uk.ac.diamond.scisoft.analysis.dataset.DoubleDataset;
 import uk.ac.diamond.scisoft.analysis.dataset.IDataset;
 import uk.ac.diamond.scisoft.analysis.dataset.IntegerDataset;
@@ -32,7 +33,7 @@ import fr.esrf.TangoApi.DeviceData;
 
 public class SharedMemoryUtils {
 
-	public static List<AbstractDataset> getSharedMemoryValue(final TangoConnection connection,
+	public static List<Dataset> getSharedMemoryValue(final TangoConnection connection,
 						                                     final String          memoryName,
 						                                     final PlotType        type) throws Exception { 
 		
@@ -40,7 +41,7 @@ public class SharedMemoryUtils {
 		return SharedMemoryUtils.getSharedMemoryValue(connection, memoryName, chunkSize, type);
 	}
 	
-	public static List<AbstractDataset> getSharedMemoryValue(final TangoConnection connection,
+	public static List<Dataset> getSharedMemoryValue(final TangoConnection connection,
 															 final String          memoryName,
 															 final int             chunkSize,
 															 final PlotType        type) throws Exception {       
@@ -60,23 +61,23 @@ public class SharedMemoryUtils {
 			if (info[2]==1) { // Double/Float
 				ret = connection.executeCommand(getDoubleArrayCommand(), out, false);
 				final double[] data = ret.extractDoubleArray();
-				return Arrays.asList(new AbstractDataset[]{new DoubleDataset(data, new int[]{info[0],info[1]})});//TODO Size!!
+				return Arrays.asList(new Dataset[]{new DoubleDataset(data, new int[]{info[0],info[1]})});//TODO Size!!
 			
 			} else { // Long/Int
 				ret = connection.executeCommand(getLongArrayCommand(), out, false);
 				final int[] data = ret.extractLongArray();
-				return Arrays.asList(new AbstractDataset[]{new IntegerDataset(data, new int[]{info[0],info[1]})});//TODO Size!!
+				return Arrays.asList(new Dataset[]{new IntegerDataset(data, new int[]{info[0],info[1]})});//TODO Size!!
 			}
 			
 		} else {
 			
-			final List<AbstractDataset> sets = new ArrayList<AbstractDataset>(chunkSize);
+			final List<Dataset> sets = new ArrayList<Dataset>(chunkSize);
 			final String dataTime = DateFormat.getDateTimeInstance().format(new Date());
 			for (int i = 0; i < chunkSize; i++) {
 				out = new DeviceData();
 				out.insert(new String[]{TangoUtils.getSpecName().toLowerCase(),memoryName,String.valueOf(i)});
 				
-				final AbstractDataset set;
+				final Dataset set;
 				if (info[2]==1) { // Double/Float
 					ret = connection.executeCommand(getDoubleSliceCommand(), out, false);
 					final double[] data = ret.extractDoubleArray();
@@ -138,12 +139,12 @@ public class SharedMemoryUtils {
 	}
 
 
-	public static IDataset getXAxis(final AbstractDataset set) throws Exception {
+	public static IDataset getXAxis(final Dataset set) throws Exception {
 		
 		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		final boolean        isCalib = store.getBoolean(CalibrationConstants.USE);
 		if (!isCalib) {
-			return AbstractDataset.arange(0, set.getSize());
+			return DatasetFactory.createRange(0, set.getSize());
 		}
 		
         return CalibrationUtils.getCalibrated(set, null, true);

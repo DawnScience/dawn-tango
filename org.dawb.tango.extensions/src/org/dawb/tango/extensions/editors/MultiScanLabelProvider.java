@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 
 public class MultiScanLabelProvider extends ColumnLabelProvider {
 
@@ -53,7 +53,7 @@ public class MultiScanLabelProvider extends ColumnLabelProvider {
 
 		return object instanceof String
 			       ? (String)object
-			       : ((AbstractDataset)object).getName();
+			       : ((Dataset)object).getName();
 	}
 
 
@@ -64,9 +64,9 @@ public class MultiScanLabelProvider extends ColumnLabelProvider {
 		
 		final TreeNode node  = (TreeNode)element;
 		final Object  object = ((DefaultMutableTreeNode)node).getUserObject();
-	    if (object instanceof AbstractDataset && system!=null) {
+	    if (object instanceof Dataset && system!=null) {
 	    	
-	    	return ((AbstractPlottingSystem)system).get1DPlotColor((AbstractDataset)object);
+	    	return ((AbstractPlottingSystem)system).get1DPlotColor((Dataset)object);
 	    }
 		return null;
 	}

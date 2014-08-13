@@ -33,7 +33,7 @@ import ptolemy.data.IntToken;
 import ptolemy.data.expr.Parameter;
 import ptolemy.data.expr.StringParameter;
 import ptolemy.kernel.CompositeEntity;
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 import uk.ac.diamond.scisoft.analysis.message.DataMessageComponent;
 
 import com.isencia.passerelle.actor.ProcessingException;
@@ -158,7 +158,7 @@ public class SharedMemorySource extends AbstractDataMessageSource {
 			
 			final int cSize = ((IntToken)chunkSize.getToken()).intValue();
 			
-			final List<AbstractDataset> sets = SharedMemoryUtils.getSharedMemoryValue(connection, 
+			final List<Dataset> sets = SharedMemoryUtils.getSharedMemoryValue(connection, 
 					                                                                  memoryName, 
 					                                                                  cSize, 
 					                                                                  plotType);
@@ -166,12 +166,12 @@ public class SharedMemorySource extends AbstractDataMessageSource {
 			final DataMessageComponent  ret  = new DataMessageComponent();
 			final String               name  = outputName.getExpression();     
 			if (plotType == PlotType.IMAGE) {
-				final AbstractDataset image = sets.get(0);
+				final Dataset image = sets.get(0);
 				image.setName(name);
 				ret.addList(name, sets.get(0));
 			} else {
 				int i = 1;
-				for (AbstractDataset a : sets) {
+				for (Dataset a : sets) {
 					
 					a.setName(name+i);
 					ret.addList(name+i, a);
@@ -294,11 +294,11 @@ public class SharedMemorySource extends AbstractDataMessageSource {
                                     ? PlotType.XY : PlotType.IMAGE;
 
 			if (plotType==PlotType.IMAGE) {
-				ret.add(new Variable(outputName.getExpression(), VARIABLE_TYPE.ARRAY, null, AbstractDataset.class));
+				ret.add(new Variable(outputName.getExpression(), VARIABLE_TYPE.ARRAY, null, Dataset.class));
 			} else {
 				final int cSize = ((IntToken)chunkSize.getToken()).intValue();
 				for (int i = 1; i <= cSize; i++) {
-					ret.add(new Variable(outputName.getExpression()+i, VARIABLE_TYPE.ARRAY, null, AbstractDataset.class));
+					ret.add(new Variable(outputName.getExpression()+i, VARIABLE_TYPE.ARRAY, null, Dataset.class));
 				}
 			}
 			return ret;
