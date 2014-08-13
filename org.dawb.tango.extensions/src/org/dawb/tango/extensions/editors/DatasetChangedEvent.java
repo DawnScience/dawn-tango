@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 
 public class DatasetChangedEvent extends EventObject {
 
@@ -23,19 +23,19 @@ public class DatasetChangedEvent extends EventObject {
 	 */
 	private static final long serialVersionUID = 4514585546528830846L;
 	
-	private List<AbstractDataset> selections;
+	private List<Dataset> selections;
 
 	public DatasetChangedEvent(CheckboxTreeViewer dataViewer,
-			List<AbstractDataset> selections) {
+			List<Dataset> selections) {
 		super(dataViewer);
 		this.selections = selections;
 	}
 
-	public List<AbstractDataset> getSelections() {
+	public List<Dataset> getSelections() {
 		return selections;
 	}
 
-	public void setSelections(List<AbstractDataset> selections) {
+	public void setSelections(List<Dataset> selections) {
 		this.selections = selections;
 	}
 

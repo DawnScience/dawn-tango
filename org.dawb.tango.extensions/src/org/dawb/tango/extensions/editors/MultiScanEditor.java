@@ -58,7 +58,7 @@ import org.eclipse.ui.progress.IProgressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 import uk.ac.diamond.scisoft.analysis.dataset.IDataset;
 
 
@@ -236,7 +236,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 	 * 
 	 * @param selections - takes copy and possibly modifies it
 	 */
-	protected void updatePlot(final List<AbstractDataset> sel) {
+	protected void updatePlot(final List<Dataset> sel) {
 		
 		if (doingUpdate) return;
 		

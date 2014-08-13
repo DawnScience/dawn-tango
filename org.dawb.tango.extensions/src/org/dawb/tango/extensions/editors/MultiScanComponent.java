@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.diamond.scisoft.analysis.dataset.AbstractDataset;
+import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 
 /**
  * This view can view and plot any file. It is most efficient if the Loader that LoaderFactory
@@ -191,7 +191,7 @@ public class MultiScanComponent implements ICheckStateListener {
 	}
 
 	private Set<DefaultMutableTreeNode>  checked;
-	private List<AbstractDataset>        selections;
+	private List<Dataset>        selections;
 
 	
 	@Override
@@ -199,7 +199,7 @@ public class MultiScanComponent implements ICheckStateListener {
 		
 
 		if (checked==null)    checked    = new HashSet<DefaultMutableTreeNode>(7);
-		if (selections==null) selections = new IdentityList<AbstractDataset>();
+		if (selections==null) selections = new IdentityList<Dataset>();
 
 		if (event!=null) {
 			final DefaultMutableTreeNode node = (DefaultMutableTreeNode)event.getElement();
@@ -210,8 +210,8 @@ public class MultiScanComponent implements ICheckStateListener {
 				checked.add(node);
 			}
 
-			if (node.getUserObject() instanceof AbstractDataset) {
-				final AbstractDataset        set  = (AbstractDataset)node.getUserObject();
+			if (node.getUserObject() instanceof Dataset) {
+				final Dataset        set  = (Dataset)node.getUserObject();
 				if (!event.getChecked()) {
 					selections.remove(set);
 				} else {
@@ -224,7 +224,7 @@ public class MultiScanComponent implements ICheckStateListener {
 				for (int i = 0 ; i<node.getChildCount(); ++i) {
 					final DefaultMutableTreeNode c = (DefaultMutableTreeNode)node.getChildAt(i);
 					dataViewer.setChecked(c, event.getChecked());
-					final AbstractDataset  set  = (AbstractDataset)c.getUserObject();
+					final Dataset  set  = (Dataset)c.getUserObject();
 					if (event.getChecked()) {
 						checked.add(c);
 						if (!selections.contains(set))  selections.add(set);
@@ -278,7 +278,7 @@ public class MultiScanComponent implements ICheckStateListener {
 		listeners.remove(l);
 	}
 	
-	private void fireDatasetListeners(List<AbstractDataset> selections) {
+	private void fireDatasetListeners(List<Dataset> selections) {
 		if (listeners==null) return;
 		final DatasetChangedEvent event = new DatasetChangedEvent(this.dataViewer, selections);
 		for (IDatasetListener l : listeners) l.datasetSelectionChanged(event);
@@ -316,10 +316,10 @@ public class MultiScanComponent implements ICheckStateListener {
 				this.dataViewer.setExpandedElements(new Object[]{element});
 				this.dataViewer.setSubtreeChecked(element, true);
 			
-				final List<AbstractDataset> selections = new IdentityList<AbstractDataset>();
+				final List<Dataset> selections = new IdentityList<Dataset>();
 				final TreeNode node = (TreeNode)element;
 				for (int i = 0; i < node.getChildCount(); i++) {
-					selections.add((AbstractDataset)((DefaultMutableTreeNode)node.getChildAt(i)).getUserObject());
+					selections.add((Dataset)((DefaultMutableTreeNode)node.getChildAt(i)).getUserObject());
 				}
 				fireDatasetListeners(selections);
 			}
@@ -338,13 +338,13 @@ public class MultiScanComponent implements ICheckStateListener {
     
 	protected void setPlot(String scanName, String... plotNames) {
 		
-		if (selections==null) selections = new IdentityList<AbstractDataset>();
+		if (selections==null) selections = new IdentityList<Dataset>();
 		this.selections.clear();
 		updateSelection();
 		
 		final Collection<String>         names = Arrays.asList(plotNames);
-		final Collection<AbstractDataset> sets = this.data.getSets(scanName);
-		for (AbstractDataset as : sets) {
+		final Collection<Dataset> sets = this.data.getSets(scanName);
+		for (Dataset as : sets) {
 			if (names.contains(as.getName())) selections.add(as);
 		}
 		updateSelection();
