@@ -9,29 +9,15 @@
  */ 
 package org.dawb.passerelle.actors.hardware;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.MBeanServerConnection;
-
-import org.dawb.common.util.ExpressionUtils;
-import org.dawb.passerelle.actors.hardware.motor.MotorBean;
-import org.dawb.passerelle.actors.hardware.motor.MotorContainer;
-import org.dawb.passerelle.actors.hardware.motor.MotorParameter;
 import org.dawb.passerelle.common.actors.AbstractDataMessageTransformer;
-import org.dawb.passerelle.common.message.DataMessageException;
 import org.dawb.passerelle.common.message.IVariable;
-import org.dawb.passerelle.common.message.IVariable.VARIABLE_TYPE;
 import org.dawb.passerelle.common.message.MessageUtils;
-import org.dawb.passerelle.common.message.Variable;
-import org.dawb.passerelle.common.utils.SubstituteUtils;
-import org.dawb.tango.extensions.TangoUtils;
-import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
-import org.dawb.workbench.jmx.RemoteWorkbenchAgent;
+import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,15 +27,10 @@ import ptolemy.data.expr.StringParameter;
 import ptolemy.kernel.CompositeEntity;
 import ptolemy.kernel.util.Attribute;
 import ptolemy.kernel.util.IllegalActionException;
-import ptolemy.kernel.util.Settable;
 import uk.ac.diamond.scisoft.analysis.message.DataMessageComponent;
 
 import com.isencia.passerelle.actor.ProcessingException;
 import com.isencia.passerelle.util.ptolemy.StringChoiceParameter;
-
-import fr.esrf.TangoApi.DeviceAttribute;
-
-import org.eclipse.swt.SWT;
 
 /**
  * This actor sets or gets the TANGO mock mode. It has four different modes

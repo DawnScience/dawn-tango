@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.MBeanServerConnection;
-
 import org.dawb.common.util.ExpressionUtils;
 import org.dawb.passerelle.actors.hardware.motor.MotorBean;
 import org.dawb.passerelle.actors.hardware.motor.MotorContainer;
@@ -29,7 +27,6 @@ import org.dawb.passerelle.common.utils.SubstituteUtils;
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
-import org.dawb.workbench.jmx.RemoteWorkbenchAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
