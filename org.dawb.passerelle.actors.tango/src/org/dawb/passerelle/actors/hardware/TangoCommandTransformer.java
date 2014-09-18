@@ -41,6 +41,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.dawnsci.analysis.api.message.DataMessageComponent;
 import org.eclipse.gmf.runtime.common.core.util.StringUtil;
 import org.eclipse.ui.IWorkbenchPart;
 import org.slf4j.Logger;
@@ -48,7 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import ptolemy.kernel.CompositeEntity;
 import ptolemy.kernel.util.Settable;
-import uk.ac.diamond.scisoft.analysis.message.DataMessageComponent;
 
 import com.isencia.passerelle.actor.ProcessingException;
 import com.isencia.passerelle.resources.actor.IResourceActor;

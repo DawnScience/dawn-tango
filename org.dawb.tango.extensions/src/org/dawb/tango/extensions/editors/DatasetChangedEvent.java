@@ -12,9 +12,8 @@ package org.dawb.tango.extensions.editors;
 import java.util.EventObject;
 import java.util.List;
 
+import org.eclipse.dawnsci.analysis.dataset.impl.Dataset;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-
-import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 
 public class DatasetChangedEvent extends EventObject {
 

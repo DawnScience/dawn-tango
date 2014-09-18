@@ -22,6 +22,7 @@ import javax.swing.tree.TreeNode;
 
 import org.dawb.common.util.list.IdentityList;
 import org.dawnsci.io.spec.MultiScanDataParser;
+import org.eclipse.dawnsci.analysis.dataset.impl.Dataset;
 import org.eclipse.dawnsci.plotting.api.IPlottingSystem;
 import org.eclipse.dawnsci.plotting.api.trace.ITraceListener;
 import org.eclipse.dawnsci.plotting.api.trace.TraceEvent;
@@ -45,8 +46,6 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import uk.ac.diamond.scisoft.analysis.dataset.Dataset;
 
 /**
  * This view can view and plot any file. It is most efficient if the Loader that LoaderFactory
