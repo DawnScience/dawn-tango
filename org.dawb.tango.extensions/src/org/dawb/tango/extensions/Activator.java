@@ -9,9 +9,12 @@
  */ 
 package org.dawb.tango.extensions;
 
+import java.util.Hashtable;
+
+import org.dawb.common.services.IHardwareService;
+import org.dawb.tango.extensions.factory.TangoHardwareService;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -38,6 +41,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		plugin = this;
+		
+		Hashtable<String, String> props = new Hashtable<String, String>(1);
+		props.put("description", "A service which provides access to Tango Hardware.");
+		context.registerService(IHardwareService.class, new TangoHardwareService(), props);
+
 		super.start(bundleContext);
 	}
 
