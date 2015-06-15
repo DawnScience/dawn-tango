@@ -100,7 +100,7 @@ class MockTangoConnection extends AbstractTangoConnection {
 	private static MBeanServerConnection remoteClientConnection;
 	
 	private MBeanServerConnection getRemoteClient() throws Exception {
-		if (remoteClientConnection==null) remoteClientConnection = RemoteWorkbenchAgent.getServerConnection(1000);
+		if (remoteClientConnection==null) remoteClientConnection = RemoteWorkbenchAgent.getInstance().getServerConnection(1000);
 		return remoteClientConnection;
 	}
 
