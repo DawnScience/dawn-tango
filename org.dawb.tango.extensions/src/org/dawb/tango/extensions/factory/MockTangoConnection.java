@@ -19,7 +19,6 @@ import javax.management.MBeanServerConnection;
 
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.workbench.jmx.RemoteWorkbenchAgent;
-import org.dawb.workbench.jmx.RemoteWorkbenchConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +100,7 @@ class MockTangoConnection extends AbstractTangoConnection {
 	private static MBeanServerConnection remoteClientConnection;
 	
 	private MBeanServerConnection getRemoteClient() throws Exception {
-		if (remoteClientConnection==null) remoteClientConnection = RemoteWorkbenchConnection.getServerConnection(1000);
+		if (remoteClientConnection==null) remoteClientConnection = RemoteWorkbenchAgent.getServerConnection(1000);
 		return remoteClientConnection;
 	}
 
