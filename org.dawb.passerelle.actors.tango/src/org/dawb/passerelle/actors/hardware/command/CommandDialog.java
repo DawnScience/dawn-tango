@@ -10,8 +10,8 @@
 package org.dawb.passerelle.actors.hardware.command;
 
 import org.dawb.common.ui.util.GridUtils;
-import org.dawnsci.common.richbeans.components.selector.VerticalListEditor;
-import org.dawnsci.common.richbeans.dialog.BeanDialog;
+import org.eclipse.richbeans.widgets.dialog.BeanDialog;
+import org.eclipse.richbeans.widgets.selector.VerticalListEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;

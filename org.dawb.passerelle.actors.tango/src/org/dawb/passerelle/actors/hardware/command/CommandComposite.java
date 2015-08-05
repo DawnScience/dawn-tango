@@ -10,7 +10,7 @@
 package org.dawb.passerelle.actors.hardware.command;
 
 import org.dawb.common.ui.util.GridUtils;
-import org.dawnsci.common.richbeans.components.wrappers.TextWrapper;
+import org.eclipse.richbeans.widgets.wrappers.TextWrapper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
