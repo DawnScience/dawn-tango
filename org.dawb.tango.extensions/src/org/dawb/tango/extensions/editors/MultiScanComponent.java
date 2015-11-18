@@ -62,9 +62,9 @@ public class MultiScanComponent implements ICheckStateListener {
 	// Use table as it might get extended to do more later.
 	protected CheckboxTreeViewer  dataViewer;
 	protected MultiScanDataParser            data;
-	protected IPlottingSystem system;
+	protected IPlottingSystem<Composite> system;
 	
-	public MultiScanComponent(IPlottingSystem system) {
+	public MultiScanComponent(IPlottingSystem<Composite> system) {
 		this.system = system;
 	}
 	/**

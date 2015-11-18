@@ -17,6 +17,7 @@ import org.eclipse.dawnsci.analysis.dataset.impl.Dataset;
 import org.eclipse.dawnsci.plotting.api.IPlottingSystem;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +25,9 @@ public class MultiScanLabelProvider extends ColumnLabelProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(MultiScanLabelProvider.class);
 	
-	private IPlottingSystem system;
+	private IPlottingSystem<Composite> system;
 	
-	MultiScanLabelProvider(final IPlottingSystem editor) {
+	MultiScanLabelProvider(final IPlottingSystem<Composite> editor) {
 		this.system = editor;
 	}
 	

@@ -73,7 +73,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 	private static Logger logger = LoggerFactory.getLogger(MultiScanEditor.class);
 	
 	// This view is a composite of two other views.
-	private IPlottingSystem             plottingSystem;	
+	private IPlottingSystem<Composite>             plottingSystem;	
     private MultiScanDataParser         data;
 	private boolean                     isDefaultConnectedSpec;
 	private Composite                   plot;
@@ -362,7 +362,7 @@ public class MultiScanEditor extends EditorPart implements IReusableEditor {
 		return ((MultiScanPage)page).getMultiScanComponent();
 	}
 
-	public IPlottingSystem getPlottingSystem() {
+	public IPlottingSystem<Composite> getPlottingSystem() {
 		return this.plottingSystem;
 	}
 	

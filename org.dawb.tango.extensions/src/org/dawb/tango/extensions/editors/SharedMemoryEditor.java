@@ -82,7 +82,7 @@ public class SharedMemoryEditor extends EditorPart {
 	private static Logger logger = LoggerFactory.getLogger(SharedMemoryEditor.class);
 	
 	// This view is a composite of two other views.
-	private IPlottingSystem             plottingSystem;	
+	private IPlottingSystem<Composite>             plottingSystem;	
 	private Composite                   tools;
 	private String                      memoryName;
 	private boolean                     isMonitoring;
