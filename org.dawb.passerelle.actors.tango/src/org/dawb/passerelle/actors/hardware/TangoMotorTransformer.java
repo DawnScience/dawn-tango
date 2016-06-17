@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dawb.common.util.ExpressionUtils;
 import org.dawb.passerelle.actors.hardware.motor.MotorBean;
 import org.dawb.passerelle.actors.hardware.motor.MotorContainer;
 import org.dawb.passerelle.actors.hardware.motor.MotorParameter;
@@ -27,6 +26,7 @@ import org.dawb.passerelle.common.utils.SubstituteUtils;
 import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.factory.TangoConnection;
 import org.dawb.tango.extensions.factory.TangoConnectionFactory;
+import org.dawnsci.jexl.ExpressionUtils;
 import org.eclipse.dawnsci.analysis.api.message.DataMessageComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

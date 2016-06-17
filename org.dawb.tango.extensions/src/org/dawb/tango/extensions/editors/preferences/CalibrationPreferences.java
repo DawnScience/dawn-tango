@@ -10,13 +10,11 @@
 package org.dawb.tango.extensions.editors.preferences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.dawb.common.ui.widgets.LabelFieldEditor;
-import org.dawb.common.util.ExpressionUtils;
 import org.dawb.tango.extensions.Activator;
+import org.dawnsci.jexl.ExpressionUtils;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
