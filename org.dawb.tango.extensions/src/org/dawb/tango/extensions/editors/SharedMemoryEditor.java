@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.dawnsci.analysis.api.dataset.IDataset;
 import org.eclipse.dawnsci.analysis.dataset.impl.Dataset;
-import org.eclipse.dawnsci.analysis.dataset.impl.IntegerDataset;
+import org.eclipse.dawnsci.analysis.dataset.impl.DatasetFactory;
 import org.eclipse.dawnsci.plotting.api.IPlottingSystem;
 import org.eclipse.dawnsci.plotting.api.PlotType;
 import org.eclipse.dawnsci.plotting.api.PlottingFactory;
@@ -394,10 +394,7 @@ public class SharedMemoryEditor extends EditorPart {
 	}
 	
 	private static Dataset createAxisDataset(int size) {
-		final int[] data = new int[size];
-		for (int i = 0; i < data.length; i++) data[i] = i;
-		IntegerDataset ret = new IntegerDataset(data, size);
-		return ret;
+		return DatasetFactory.createRange(size, Dataset.INT32);
 	}
 	
 	/**
