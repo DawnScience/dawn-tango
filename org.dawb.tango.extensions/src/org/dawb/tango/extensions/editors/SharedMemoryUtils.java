@@ -21,12 +21,10 @@ import org.dawb.tango.extensions.TangoUtils;
 import org.dawb.tango.extensions.editors.preferences.CalibrationConstants;
 import org.dawb.tango.extensions.editors.preferences.SharedConstants;
 import org.dawb.tango.extensions.factory.TangoConnection;
-import org.eclipse.dawnsci.analysis.api.dataset.IDataset;
-import org.eclipse.dawnsci.analysis.dataset.impl.Dataset;
-import org.eclipse.dawnsci.analysis.dataset.impl.DatasetFactory;
-import org.eclipse.dawnsci.analysis.dataset.impl.DoubleDataset;
-import org.eclipse.dawnsci.analysis.dataset.impl.IntegerDataset;
 import org.eclipse.dawnsci.plotting.api.PlotType;
+import org.eclipse.january.dataset.Dataset;
+import org.eclipse.january.dataset.DatasetFactory;
+import org.eclipse.january.dataset.IDataset;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import fr.esrf.TangoApi.DeviceData;
@@ -61,12 +59,12 @@ public class SharedMemoryUtils {
 			if (info[2]==1) { // Double/Float
 				ret = connection.executeCommand(getDoubleArrayCommand(), out, false);
 				final double[] data = ret.extractDoubleArray();
-				return Arrays.asList(new Dataset[]{new DoubleDataset(data, new int[]{info[0],info[1]})});//TODO Size!!
+				return Arrays.asList(new Dataset[]{DatasetFactory.createFromObject(data, info[0],info[1])});//TODO Size!!
 			
 			} else { // Long/Int
 				ret = connection.executeCommand(getLongArrayCommand(), out, false);
 				final int[] data = ret.extractLongArray();
-				return Arrays.asList(new Dataset[]{new IntegerDataset(data, new int[]{info[0],info[1]})});//TODO Size!!
+				return Arrays.asList(new Dataset[]{DatasetFactory.createFromObject(data, info[0],info[1])});//TODO Size!!
 			}
 			
 		} else {
@@ -81,12 +79,12 @@ public class SharedMemoryUtils {
 				if (info[2]==1) { // Double/Float
 					ret = connection.executeCommand(getDoubleSliceCommand(), out, false);
 					final double[] data = ret.extractDoubleArray();
-					set = new DoubleDataset(data,data.length);
+					set = DatasetFactory.createFromObject(data);
 				
 				} else { // Long/Int
 					ret = connection.executeCommand(getLongSliceCommand(), out, false);
 					final int[] data = ret.extractLongArray();
-					set = new IntegerDataset(data,data.length);
+					set = DatasetFactory.createFromObject(data);
 				}
 				
 				set.setName(i+" ("+dataTime+")");

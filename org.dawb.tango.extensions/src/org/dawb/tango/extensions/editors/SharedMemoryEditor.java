@@ -32,13 +32,13 @@ import org.dawnsci.plotting.AbstractPlottingSystem;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.dawnsci.analysis.api.dataset.IDataset;
-import org.eclipse.dawnsci.analysis.dataset.impl.Dataset;
-import org.eclipse.dawnsci.analysis.dataset.impl.IntegerDataset;
 import org.eclipse.dawnsci.plotting.api.IPlottingSystem;
 import org.eclipse.dawnsci.plotting.api.PlotType;
 import org.eclipse.dawnsci.plotting.api.PlottingFactory;
 import org.eclipse.dawnsci.plotting.api.trace.ColorOption;
+import org.eclipse.january.dataset.Dataset;
+import org.eclipse.january.dataset.DatasetFactory;
+import org.eclipse.january.dataset.IDataset;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -394,10 +394,7 @@ public class SharedMemoryEditor extends EditorPart {
 	}
 	
 	private static Dataset createAxisDataset(int size) {
-		final int[] data = new int[size];
-		for (int i = 0; i < data.length; i++) data[i] = i;
-		IntegerDataset ret = new IntegerDataset(data, size);
-		return ret;
+		return DatasetFactory.createRange(size, Dataset.INT32);
 	}
 	
 	/**
